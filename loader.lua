@@ -7,14 +7,14 @@ local toolbarHeight = 36
 local buttonWidth = 100
 local buttonHeight = 28
 local buttonSpacing = 5
-local buttonNames = {"Farming", "Gacha", "Ngumpet", "Teleport", "Tombol 5", "Tombol 6", "Tombol 7", "Tombol 8"}
+local buttonNames = {"Farming", "Gacha", "Ngumpet", "Teleport", "Get Loc", "Tombol 6", "Tombol 7", "Tombol 8"}
 
 local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/autohatchx10.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/hiddenplace.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/tele.lua",
-    "https://url-script-5.lua",
+    "https://https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/coordinatCopier.lua",
     "https://url-script-6.lua",
     "https://url-script-7.lua",
     "https://url-script-8.lua",
