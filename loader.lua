@@ -14,7 +14,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/autohatchx10.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/hiddenplace.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/tele.lua",
-    "https://https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/coordinatCopier.lua",
+    "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/coordinatCopier.lua",
     "https://url-script-6.lua",
     "https://url-script-7.lua",
     "https://url-script-8.lua",
