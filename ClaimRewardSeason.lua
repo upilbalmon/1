@@ -1,145 +1,167 @@
--- Buat GUI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ClaimAwardGui"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
+-- Main Frame (centered initially)
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 220, 0, 120)
-Frame.Position = UDim2.new(0.5, -110, 0.5, -60)
-Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-Frame.BackgroundTransparency = 0.35
+Frame.Size = UDim2.new(0, 170, 0, 90)
+Frame.Position = UDim2.new(0.5, -85, 0.5, -45) -- Centered (0.5, -halfWidth, 0.5, -halfHeight)
+Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+Frame.BackgroundTransparency = 0.2
 Frame.BorderSizePixel = 0
 Frame.Active = true
 Frame.Draggable = true
 Frame.Parent = ScreenGui
 
--- Rounded corner
+-- Rounded corners
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 6)
 UICorner.Parent = Frame
 
 -- Title
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, -25, 0, 25)
-Title.Position = UDim2.new(0, 10, 0, 0)
+Title.Size = UDim2.new(1, -25, 0, 20)
+Title.Position = UDim2.new(0, 10, 0, 5)
 Title.BackgroundTransparency = 1
-Title.Text = "Claim Award"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.Font = Enum.Font.SourceSansBold
-Title.TextSize = 16
+Title.Text = "CLAIM AWARD"
+Title.TextColor3 = Color3.fromRGB(220, 220, 220)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 14
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Parent = Frame
 
--- Tombol Close
+-- Close Button (transparent)
 local CloseButton = Instance.new("TextButton")
-CloseButton.Size = UDim2.new(0, 25, 0, 25)
-CloseButton.Position = UDim2.new(1, -25, 0, 0)
+CloseButton.Size = UDim2.new(0, 20, 0, 20)
+CloseButton.Position = UDim2.new(1, -25, 0, 5)
 CloseButton.Text = "×"
-CloseButton.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
-CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseButton.Font = Enum.Font.SourceSansBold
+CloseButton.BackgroundTransparency = 1
+CloseButton.TextColor3 = Color3.fromRGB(220, 220, 220)
+CloseButton.Font = Enum.Font.GothamBold
 CloseButton.TextSize = 18
 CloseButton.Parent = Frame
 
-local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(0, 4)
-CloseCorner.Parent = CloseButton
-
--- Input box (cukup untuk 4 digit angka)
+-- Input Box
 local TextBox = Instance.new("TextBox")
-TextBox.Size = UDim2.new(0, 60, 0, 25)
-TextBox.Position = UDim2.new(0, 15, 0, 35)
+TextBox.Size = UDim2.new(0, 50, 0, 25)
+TextBox.Position = UDim2.new(0, 10, 0, 30)
 TextBox.PlaceholderText = "1-30"
-TextBox.Text = "1-30" -- default value
-TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-TextBox.BackgroundTransparency = 0.2
+TextBox.Text = "1-30"
+TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
 TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.ClearTextOnFocus = false
-TextBox.Font = Enum.Font.SourceSans
-TextBox.TextSize = 14
+TextBox.Font = Enum.Font.Gotham
+TextBox.TextSize = 13
+TextBox.TextXAlignment = Enum.TextXAlignment.Center
 TextBox.Parent = Frame
 
-local TextBoxCorner = Instance.new("UICorner")
-TextBoxCorner.CornerRadius = UDim.new(0, 4)
-TextBoxCorner.Parent = TextBox
-
--- Tombol Claim (di samping kanan TextBox)
+-- Claim Button
 local Button = Instance.new("TextButton")
-Button.Size = UDim2.new(0, 90, 0, 25)
-Button.Position = UDim2.new(0, 85, 0, 35)
-Button.Text = "Claim"
-Button.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-Button.BackgroundTransparency = 0.1
+Button.Size = UDim2.new(0, 80, 0, 25)
+Button.Position = UDim2.new(0, 70, 0, 30)
+Button.Text = "CLAIM"
+Button.BackgroundColor3 = Color3.fromRGB(70, 140, 80)
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button.Font = Enum.Font.SourceSansBold
-Button.TextSize = 14
+Button.Font = Enum.Font.GothamBold
+Button.TextSize = 13
 Button.Parent = Frame
 
-local ButtonCorner = Instance.new("UICorner")
-ButtonCorner.CornerRadius = UDim.new(0, 4)
-ButtonCorner.Parent = Button
-
--- Status Label (font kecil, center)
+-- Status Label
 local Status = Instance.new("TextLabel")
-Status.Size = UDim2.new(1, -20, 0, 18)
-Status.Position = UDim2.new(0, 10, 1, -25)
+Status.Size = UDim2.new(1, -20, 0, 16)
+Status.Position = UDim2.new(0, 10, 0, 60)
 Status.BackgroundTransparency = 1
-Status.Text = "Status: Idle"
-Status.TextColor3 = Color3.fromRGB(200, 200, 200)
-Status.Font = Enum.Font.SourceSans
+Status.Text = "Ready"
+Status.TextColor3 = Color3.fromRGB(180, 180, 180)
+Status.Font = Enum.Font.Gotham
 Status.TextSize = 12
 Status.TextXAlignment = Enum.TextXAlignment.Center
 Status.Parent = Frame
 
--- Function claim
+-- Add rounded corners
+local function addCorner(parent, radius)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, radius or 4)
+    corner.Parent = parent
+end
+
+addCorner(TextBox)
+addCorner(Button)
+
+-- Claim function
 local function claimAward(boxNumber)
     local args = {
         "ClaimOnceSeasonAward",
-        {
-            boxNumber,
-            false
-        }
+        {boxNumber, false}
     }
-    local result = game:GetService("ReplicatedStorage"):WaitForChild("Msg"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
-    print("Claim box:", boxNumber, "->", result)
-    return result
+    local success, result = pcall(function()
+        return game:GetService("ReplicatedStorage"):WaitForChild("Msg"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+    end)
+    return success and result
 end
 
--- Event tombol Claim
+-- Claim button functionality
 Button.MouseButton1Click:Connect(function()
-    local inputBox = TextBox.Text
-    if inputBox == "" then
-        Status.Text = "Status: Harap isi nomor box!"
-        return
-    end
+    local input = TextBox.Text:gsub("%s+", "")
+    Status.Text = "Processing..."
     
-    Status.Text = "Status: Running..."
-
-    if string.find(inputBox, "-") then
-        local startNum, endNum = string.match(inputBox, "(%d+)%-(%d+)")
-        startNum, endNum = tonumber(startNum), tonumber(endNum)
-        if startNum and endNum then
-            for i = startNum, endNum do
-                claimAward(i)
-                Status.Text = "Status: Claimed box " .. i
+    if input:find("-") then
+        local s, e = input:match("(%d+)%-(%d+)")
+        s, e = tonumber(s), tonumber(e)
+        if s and e and s <= e then
+            local claimed = 0
+            for i = s, e do
+                if claimAward(i) then claimed += 1 end
+                Status.Text = "Claiming "..i
                 task.wait(0.1)
             end
-            Status.Text = "Status: Selesai!"
+            Status.Text = "Claimed "..claimed.."/"..(e-s+1)
         else
-            Status.Text = "Status: Format salah (contoh 1-30)"
+            Status.Text = "Invalid range"
         end
     else
-        local boxNumber = tonumber(inputBox)
-        if boxNumber then
-            claimAward(boxNumber)
-            Status.Text = "Status: Claimed box " .. boxNumber
+        local num = tonumber(input)
+        if num then
+            if claimAward(num) then
+                Status.Text = "Claimed "..num
+            else
+                Status.Text = "Failed!"
+            end
         else
-            Status.Text = "Status: Input salah!"
+            Status.Text = "Invalid input"
         end
     end
 end)
 
--- Event tombol Close
+-- Close button functionality
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
+
+-- Hover effects
+local function addHover(button, normal, hover, isText)
+    if isText then
+        button.MouseEnter:Connect(function() button.TextColor3 = hover end)
+        button.MouseLeave:Connect(function() button.TextColor3 = normal end)
+    else
+        button.MouseEnter:Connect(function() button.BackgroundColor3 = hover end)
+        button.MouseLeave:Connect(function() button.BackgroundColor3 = normal end)
+    end
+end
+
+addHover(Button, Color3.fromRGB(70, 140, 80), Color3.fromRGB(90, 160, 90))
+addHover(CloseButton, Color3.fromRGB(220, 220, 220), Color3.fromRGB(255, 255, 255), true)
+
+-- Input focus effects
+TextBox.Focused:Connect(function()
+    TextBox.BackgroundColor3 = Color3.fromRGB(60, 60, 65)
+end)
+
+TextBox.FocusLost:Connect(function()
+    TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
+end)
+
+-- Make sure GUI appears on top
+ScreenGui.ResetOnSpawn = false
+if game:GetService("RunService"):IsStudio() then
+    ScreenGui.Enabled = true
+end
