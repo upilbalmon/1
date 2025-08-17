@@ -1,11 +1,21 @@
+--==[ Claim Season Award GUI (dengan Premium Checklist) ]==--
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+
+local localPlayer = Players.LocalPlayer
+
+-- Root GUI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "ClaimAwardGui"
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = localPlayer:WaitForChild("PlayerGui")
 
--- Main Frame (centered initially)
+-- Main Frame (centered)
 local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 170, 0, 90)
-Frame.Position = UDim2.new(0.5, -85, 0.5, -45) -- Centered (0.5, -halfWidth, 0.5, -halfHeight)
+Frame.Size = UDim2.new(0, 170, 0, 110) -- dinaikkan agar muat checkbox
+Frame.Position = UDim2.new(0.5, -85, 0.5, -55)
 Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
 Frame.BackgroundTransparency = 0.2
 Frame.BorderSizePixel = 0
@@ -13,7 +23,6 @@ Frame.Active = true
 Frame.Draggable = true
 Frame.Parent = ScreenGui
 
--- Rounded corners
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 6)
 UICorner.Parent = Frame
@@ -30,7 +39,7 @@ Title.TextSize = 14
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Parent = Frame
 
--- Close Button (transparent)
+-- Close Button
 local CloseButton = Instance.new("TextButton")
 CloseButton.Size = UDim2.new(0, 20, 0, 20)
 CloseButton.Position = UDim2.new(1, -25, 0, 5)
@@ -65,10 +74,59 @@ Button.Font = Enum.Font.GothamBold
 Button.TextSize = 13
 Button.Parent = Frame
 
+-- ===== Premium Checklist =====
+local PremiumChecked = false
+
+-- Container agar gampang di-klik
+local PremiumContainer = Instance.new("TextButton")
+PremiumContainer.BackgroundTransparency = 1
+PremiumContainer.BorderSizePixel = 0
+PremiumContainer.Size = UDim2.new(1, -20, 0, 20)
+PremiumContainer.Position = UDim2.new(0, 10, 0, 60)
+PremiumContainer.Text = ""
+PremiumContainer.AutoButtonColor = false
+PremiumContainer.Parent = Frame
+
+-- Kotak cek
+local CheckBox = Instance.new("Frame")
+CheckBox.Size = UDim2.new(0, 16, 0, 16)
+CheckBox.Position = UDim2.new(0, 0, 0, 2)
+CheckBox.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
+CheckBox.BorderSizePixel = 0
+CheckBox.Parent = PremiumContainer
+local cbCorner = Instance.new("UICorner")
+cbCorner.CornerRadius = UDim.new(0, 4)
+cbCorner.Parent = CheckBox
+
+-- Tanda centang
+local CheckMark = Instance.new("TextLabel")
+CheckMark.Size = UDim2.new(1, 0, 1, 0)
+CheckMark.BackgroundTransparency = 1
+CheckMark.Text = "✓"
+CheckMark.Visible = false
+CheckMark.TextColor3 = Color3.fromRGB(255, 255, 255)
+CheckMark.Font = Enum.Font.GothamBold
+CheckMark.TextSize = 14
+CheckMark.TextXAlignment = Enum.TextXAlignment.Center
+CheckMark.TextYAlignment = Enum.TextYAlignment.Center
+CheckMark.Parent = CheckBox
+
+-- Label "Premium"
+local PremiumLabel = Instance.new("TextLabel")
+PremiumLabel.BackgroundTransparency = 1
+PremiumLabel.Position = UDim2.new(0, 22, 0, 0)
+PremiumLabel.Size = UDim2.new(1, -22, 1, 0)
+PremiumLabel.Text = "Premium"
+PremiumLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+PremiumLabel.Font = Enum.Font.Gotham
+PremiumLabel.TextSize = 12
+PremiumLabel.TextXAlignment = Enum.TextXAlignment.Left
+PremiumLabel.Parent = PremiumContainer
+
 -- Status Label
 local Status = Instance.new("TextLabel")
 Status.Size = UDim2.new(1, -20, 0, 16)
-Status.Position = UDim2.new(0, 10, 0, 60)
+Status.Position = UDim2.new(0, 10, 0, 85) -- turun karena ada checkbox
 Status.BackgroundTransparency = 1
 Status.Text = "Ready"
 Status.TextColor3 = Color3.fromRGB(180, 180, 180)
@@ -77,7 +135,7 @@ Status.TextSize = 12
 Status.TextXAlignment = Enum.TextXAlignment.Center
 Status.Parent = Frame
 
--- Add rounded corners
+-- Helpers
 local function addCorner(parent, radius)
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, radius or 4)
@@ -87,14 +145,25 @@ end
 addCorner(TextBox)
 addCorner(Button)
 
--- Claim function
-local function claimAward(boxNumber)
+-- Toggle Premium
+local function setPremium(state: boolean)
+    PremiumChecked = state
+    CheckMark.Visible = state
+    CheckBox.BackgroundColor3 = state and Color3.fromRGB(70, 140, 80) or Color3.fromRGB(50, 50, 55)
+end
+
+PremiumContainer.MouseButton1Click:Connect(function()
+    setPremium(not PremiumChecked)
+end)
+
+-- Remote call helper
+local function claimAward(boxNumber: number, isPremium: boolean)
     local args = {
         "ClaimOnceSeasonAward",
-        {boxNumber, false}
+        {boxNumber, isPremium}
     }
     local success, result = pcall(function()
-        return game:GetService("ReplicatedStorage"):WaitForChild("Msg"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
+        return ReplicatedStorage:WaitForChild("Msg"):WaitForChild("RemoteFunction"):InvokeServer(unpack(args))
     end)
     return success and result
 end
@@ -103,26 +172,27 @@ end
 Button.MouseButton1Click:Connect(function()
     local input = TextBox.Text:gsub("%s+", "")
     Status.Text = "Processing..."
-    
+    local isPremium = PremiumChecked
+
     if input:find("-") then
         local s, e = input:match("(%d+)%-(%d+)")
         s, e = tonumber(s), tonumber(e)
         if s and e and s <= e then
             local claimed = 0
             for i = s, e do
-                if claimAward(i) then claimed += 1 end
-                Status.Text = "Claiming "..i
+                if claimAward(i, isPremium) then claimed += 1 end
+                Status.Text = string.format("Claiming %d%s", i, isPremium and " (Premium)" or "")
                 task.wait(0.1)
             end
-            Status.Text = "Claimed "..claimed.."/"..(e-s+1)
+            Status.Text = string.format("Claimed %d/%d%s", claimed, (e - s + 1), isPremium and " [Premium]" or "")
         else
             Status.Text = "Invalid range"
         end
     else
         local num = tonumber(input)
         if num then
-            if claimAward(num) then
-                Status.Text = "Claimed "..num
+            if claimAward(num, isPremium) then
+                Status.Text = string.format("Claimed %d%s", num, isPremium and " [Premium]" or "")
             else
                 Status.Text = "Failed!"
             end
@@ -155,13 +225,11 @@ addHover(CloseButton, Color3.fromRGB(220, 220, 220), Color3.fromRGB(255, 255, 25
 TextBox.Focused:Connect(function()
     TextBox.BackgroundColor3 = Color3.fromRGB(60, 60, 65)
 end)
-
 TextBox.FocusLost:Connect(function()
     TextBox.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
 end)
 
--- Make sure GUI appears on top
-ScreenGui.ResetOnSpawn = false
-if game:GetService("RunService"):IsStudio() then
-    ScreenGui.Enabled = true
+-- Studio helper
+if RunService:IsStudio() then
+    ScreenGui.Enabled = true -- true jika premium dicentang (UI tetap tampil di Studio)
 end
