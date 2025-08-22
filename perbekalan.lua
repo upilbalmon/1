@@ -10,7 +10,7 @@ local TEXTBOX_TRANSPARENCY = 0.2
 local BUTTON_COLOR = Color3.fromRGB(0,120,255)
 local CLOSE_COLOR  = Color3.fromRGB(220,0,0)
 local MINIM_COLOR  = Color3.fromRGB(0,180,0)
-local CORNER = 10
+local CORNER = 6
 
 local Players = game:GetService("Players")
 local RS      = game:GetService("ReplicatedStorage")
@@ -27,82 +27,103 @@ gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- Main Frame
+-- Main Frame (ukuran lebih compact)
 local main = Instance.new("Frame")
-main.Size = UDim2.fromOffset(560, 460)
-main.Position = UDim2.new(0.5, -280, 0.5, -230)
+main.Size = UDim2.fromOffset(250, 350) -- Frame lebih kecil
+main.Position = UDim2.new(0.5, -125, 0.5, -175)
 main.BackgroundColor3 = Color3.fromRGB(20,20,20)
 main.BackgroundTransparency = FRAME_TRANSPARENCY
 main.BorderSizePixel = 0
 main.Active = true
 main.ZIndex = 50
 main.Parent = gui
-Instance.new("UICorner", main).CornerRadius = UDim.new(0, CORNER)
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, CORNER)
+mainCorner.Parent = main
 
 -- Title bar
-local titleBar = Instance.new("Frame", main)
-titleBar.Size = UDim2.new(1, 0, 0, 36)
+local titleBar = Instance.new("Frame")
+titleBar.Size = UDim2.new(1, 0, 0, 28) -- Title bar lebih kecil
 titleBar.BackgroundColor3 = Color3.fromRGB(30,30,30)
 titleBar.BackgroundTransparency = TITLE_TRANSPARENCY
 titleBar.BorderSizePixel = 0
 titleBar.ZIndex = 51
-Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, CORNER)
+titleBar.Parent = main
 
-local title = Instance.new("TextLabel", titleBar)
-title.Size = UDim2.new(1, -120, 1, 0)
-title.Position = UDim2.fromOffset(12, 0)
+local titleBarCorner = Instance.new("UICorner")
+titleBarCorner.CornerRadius = UDim.new(0, CORNER)
+titleBarCorner.Parent = titleBar
+
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -70, 1, 0)
+title.Position = UDim2.fromOffset(6, 0)
 title.BackgroundTransparency = 1
 title.Text = "Panel Utility"
 title.Font = Enum.Font.GothamBold
-title.TextSize = 16
+title.TextSize = 13
 title.TextColor3 = Color3.fromRGB(230,230,230)
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.ZIndex = 52
+title.Parent = titleBar
 
 -- Close & Minimize (di title bar)
 local function makeTopButton(txt, col, offset)
-	local b = Instance.new("TextButton", titleBar)
-	b.Size = UDim2.fromOffset(32,24)
-	b.Position = UDim2.new(1, -offset, 0.5, -12)
+	local b = Instance.new("TextButton")
+	b.Size = UDim2.fromOffset(26,20) -- Tombol lebih kecil
+	b.Position = UDim2.new(1, -offset, 0.5, -10)
 	b.BackgroundColor3 = col
-	b.BackgroundTransparency = 0  -- solid agar jelas
+	b.BackgroundTransparency = 0
 	b.Text = txt
 	b.Font = Enum.Font.GothamBold
-	b.TextSize = 14
+	b.TextSize = 11
 	b.TextColor3 = Color3.new(1,1,1)
 	b.ZIndex = 60
-	b.Active = true; b.Selectable = true
-	Instance.new("UICorner", b).CornerRadius = UDim.new(0,CORNER)
+	b.Active = true
+	b.Selectable = true
+	b.Parent = titleBar
+	
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, CORNER)
+	corner.Parent = b
+	
 	return b
 end
-local btnClose = makeTopButton("×", CLOSE_COLOR, 12)
-local btnMin   = makeTopButton("—", MINIM_COLOR, 52)
 
--- Ikon minimize di bawah layar (25x25)
-local miniIcon = Instance.new("TextButton", gui)
-miniIcon.Size = UDim2.fromOffset(25,25)
-miniIcon.Position = UDim2.new(0, 10, 1, -35) -- kiri bawah
+local btnClose = makeTopButton("×", CLOSE_COLOR, 8)
+local btnMin   = makeTopButton("—", MINIM_COLOR, 38)
+
+-- Ikon minimize di bawah layar
+local miniIcon = Instance.new("TextButton")
+miniIcon.Size = UDim2.fromOffset(20,20)
+miniIcon.Position = UDim2.new(0, 6, 1, -26)
 miniIcon.BackgroundColor3 = MINIM_COLOR
 miniIcon.BackgroundTransparency = 0
 miniIcon.Text = "◙"
 miniIcon.Font = Enum.Font.GothamBold
-miniIcon.TextSize = 14
+miniIcon.TextSize = 11
 miniIcon.TextColor3 = Color3.new(1,1,1)
 miniIcon.Visible = false
 miniIcon.ZIndex = 70
-Instance.new("UICorner", miniIcon).CornerRadius = UDim.new(1,0)
+miniIcon.Parent = gui
+
+local miniIconCorner = Instance.new("UICorner")
+miniIconCorner.CornerRadius = UDim.new(1,0)
+miniIconCorner.Parent = miniIcon
 
 -- CONTENT: 1 kolom bagian (stacked)
-local content = Instance.new("Frame", main)
-content.Size = UDim2.new(1, -24, 1, -60)
-content.Position = UDim2.fromOffset(12, 48)
+local content = Instance.new("Frame")
+content.Size = UDim2.new(1, -12, 1, -46)
+content.Position = UDim2.fromOffset(6, 36)
 content.BackgroundTransparency = 1
 content.ZIndex = 55
+content.Parent = main
 
-local stack = Instance.new("UIListLayout", content)
+local stack = Instance.new("UIListLayout")
 stack.FillDirection = Enum.FillDirection.Vertical
-stack.Padding = UDim.new(0, 12)
+stack.Padding = UDim.new(0, 6) -- Padding lebih kecil
 stack.SortOrder = Enum.SortOrder.LayoutOrder
+stack.Parent = content
 
 -- Helper: Section/Card
 local function makeSection(titleText)
@@ -110,88 +131,101 @@ local function makeSection(titleText)
 	card.BackgroundColor3 = Color3.fromRGB(30,30,30)
 	card.BackgroundTransparency = FRAME_TRANSPARENCY
 	card.BorderSizePixel = 0
-	card.Size = UDim2.new(1, 0, 0, 200) -- cukup untuk 3 baris (bisa diubah)
+	card.Size = UDim2.new(1, 0, 0, 120) -- Card lebih kecil
 	card.ZIndex = 56
-	Instance.new("UICorner", card).CornerRadius = UDim.new(0, CORNER)
+	
+	local cardCorner = Instance.new("UICorner")
+	cardCorner.CornerRadius = UDim.new(0, CORNER)
+	cardCorner.Parent = card
 
-	local ttl = Instance.new("TextLabel", card)
+	local ttl = Instance.new("TextLabel")
 	ttl.BackgroundTransparency = 1
-	ttl.Position = UDim2.fromOffset(10, 6)
-	ttl.Size = UDim2.new(1, -20, 0, 24)
+	ttl.Position = UDim2.fromOffset(6, 3)
+	ttl.Size = UDim2.new(1, -12, 0, 18)
 	ttl.Text = titleText
 	ttl.Font = Enum.Font.GothamBold
-	ttl.TextSize = 14
+	ttl.TextSize = 11
 	ttl.TextColor3 = Color3.fromRGB(235,235,235)
 	ttl.TextXAlignment = Enum.TextXAlignment.Left
 	ttl.ZIndex = 57
+	ttl.Parent = card
 
-	local gridHolder = Instance.new("Frame", card)
+	local gridHolder = Instance.new("Frame")
 	gridHolder.BackgroundTransparency = 1
-	gridHolder.Position = UDim2.fromOffset(10, 36)
-	gridHolder.Size = UDim2.new(1, -20, 1, -46)
+	gridHolder.Position = UDim2.fromOffset(6, 24)
+	gridHolder.Size = UDim2.new(1, -12, 1, -30)
 	gridHolder.ZIndex = 57
+	gridHolder.Parent = card
 
-	local grid = Instance.new("UIGridLayout", gridHolder)
-	grid.CellPadding = UDim2.fromOffset(10, 10)
-	grid.CellSize = UDim2.new(0.5, -5, 0, 40) -- 2 kolom
+	local grid = Instance.new("UIGridLayout")
+	grid.CellPadding = UDim2.fromOffset(4, 4) -- Padding lebih kecil
+	grid.CellSize = UDim2.new(0.5, -2, 0, 25) -- 2 kolom, tinggi 25, lebar disesuaikan
 	grid.FillDirectionMaxCells = 2
 	grid.SortOrder = Enum.SortOrder.LayoutOrder
 	grid.StartCorner = Enum.StartCorner.TopLeft
+	grid.Parent = gridHolder
 
 	return card, gridHolder
 end
 
 local function makeBlueButton(txt)
 	local b = Instance.new("TextButton")
-	b.Size = UDim2.fromOffset(180, 40)
+	b.Size = UDim2.fromOffset(35, 25) -- Ukuran tombol 25x35 (tinggi x lebar)
 	b.BackgroundColor3 = BUTTON_COLOR
-	b.BackgroundTransparency = 0 -- solid
+	b.BackgroundTransparency = 0
 	b.Text = txt
 	b.Font = Enum.Font.GothamMedium
-	b.TextSize = 14
+	b.TextSize = 9 -- Font lebih kecil
 	b.TextColor3 = Color3.new(1,1,1)
 	b.ZIndex = 60
-	b.Active = true; b.Selectable = true
-	Instance.new("UICorner", b).CornerRadius = UDim.new(0, CORNER)
+	b.Active = true
+	b.Selectable = true
+	
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, CORNER)
+	corner.Parent = b
+	
 	return b
 end
 
 local function makeDisabledSlot()
 	local f = Instance.new("TextButton")
-	f.Size = UDim2.fromOffset(180, 40)
+	f.Size = UDim2.fromOffset(35, 25) -- Ukuran tombol 25x35
 	f.BackgroundColor3 = Color3.fromRGB(60,60,60)
 	f.BackgroundTransparency = 0
 	f.AutoButtonColor = false
 	f.Text = "—"
 	f.Font = Enum.Font.Gotham
-	f.TextSize = 14
+	f.TextSize = 9
 	f.TextColor3 = Color3.fromRGB(180,180,180)
 	f.ZIndex = 58
-	Instance.new("UICorner", f).CornerRadius = UDim.new(0, CORNER)
+	
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, CORNER)
+	corner.Parent = f
+	
 	return f
 end
 
 -- ========= BELI BEKAL (EVENTS) =========
-local bekalCard = makeSection("BELI BEKAL")
+local bekalCard, bekalGridHolder = makeSection("BELI BEKAL")
 bekalCard.Parent = content
-local bekalGrid = bekalCard:FindFirstChildOfClass("Frame"):FindFirstChildOfClass("UIGridLayout")
 
-local btnRoti = makeBlueButton("ROTI");        btnRoti.Parent = bekalCard:FindFirstChildOfClass("Frame")
-local btnPop  = makeBlueButton("POP MIE");     btnPop.Parent  = bekalCard:FindFirstChildOfClass("Frame")
-local btnTeh  = makeBlueButton("ES TEH");      btnTeh.Parent  = bekalCard:FindFirstChildOfClass("Frame")
-local btnSTMJ = makeBlueButton("STMJ");        btnSTMJ.Parent = bekalCard:FindFirstChildOfClass("Frame")
-local btnMed  = makeBlueButton("KOTAK OBAT");  btnMed.Parent  = bekalCard:FindFirstChildOfClass("Frame")
-makeDisabledSlot().Parent = bekalCard:FindFirstChildOfClass("Frame") -- slot ke-6 agar rapi
+local btnRoti = makeBlueButton("ROTI");        btnRoti.Parent = bekalGridHolder
+local btnPop  = makeBlueButton("POP MIE");     btnPop.Parent  = bekalGridHolder
+local btnTeh  = makeBlueButton("ES TEH");      btnTeh.Parent  = bekalGridHolder
+local btnSTMJ = makeBlueButton("STMJ");        btnSTMJ.Parent = bekalGridHolder
+local btnMed  = makeBlueButton("KOTAK OBAT");  btnMed.Parent  = bekalGridHolder
+local disabledSlot1 = makeDisabledSlot();      disabledSlot1.Parent = bekalGridHolder
 
 -- ========= TOOLS =========
-local toolsCard = makeSection("TOOLS")
+local toolsCard, toolsGridHolder = makeSection("TOOLS")
 toolsCard.Parent = content
-local toolsGrid = toolsCard:FindFirstChildOfClass("Frame"):FindFirstChildOfClass("UIGridLayout")
 
-local btnFly = makeBlueButton("Fly Mode");          btnFly.Parent = toolsCard:FindFirstChildOfClass("Frame")
-local btnPin = makeBlueButton("Pin Lokasi");        btnPin.Parent = toolsCard:FindFirstChildOfClass("Frame")
-local btnTp  = makeBlueButton("Teleport (X,Y,Z)");  btnTp.Parent  = toolsCard:FindFirstChildOfClass("Frame")
-makeDisabledSlot().Parent = toolsCard:FindFirstChildOfClass("Frame") -- jadi 2x2: 7 8 / 9 10
+local btnLampu = makeBlueButton("Lampu");     btnLampu.Parent = toolsGridHolder
+local btnPin = makeBlueButton("Pin Lokasi");  btnPin.Parent = toolsGridHolder
+local btnTp  = makeBlueButton("Teleport");    btnTp.Parent  = toolsGridHolder
+local disabledSlot2 = makeDisabledSlot();     disabledSlot2.Parent = toolsGridHolder
 
 -- DRAGGABLE (titleBar)
 local dragging, dragStart, startPos = false, nil, nil
@@ -236,31 +270,43 @@ btnSTMJ.MouseButton1Click:Connect(function()  checkout({{{Name="STMJ",    Price=
 btnMed.MouseButton1Click:Connect(function()   checkout({{{Name="Medkit",  Price=20000}}}) end)
 
 -- TOOLS
--- Fly Mode (toggle) - gerak relatif kamera: WASD, Space naik, LeftControl turun
-local flyOn, flyConn = false, nil
-btnFly.MouseButton1Click:Connect(function()
-	flyOn = not flyOn
-	if flyOn then
-		btnFly.Text = "Fly Mode (ON)"
-		flyConn = RunService.RenderStepped:Connect(function()
-			local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-			if not hrp then return end
-			local move = Vector3.zero
-			if UIS:IsKeyDown(Enum.KeyCode.W) then move += workspace.CurrentCamera.CFrame.LookVector end
-			if UIS:IsKeyDown(Enum.KeyCode.S) then move -= workspace.CurrentCamera.CFrame.LookVector end
-			if UIS:IsKeyDown(Enum.KeyCode.A) then move -= workspace.CurrentCamera.CFrame.RightVector end
-			if UIS:IsKeyDown(Enum.KeyCode.D) then move += workspace.CurrentCamera.CFrame.RightVector end
-			if UIS:IsKeyDown(Enum.KeyCode.Space) then move += Vector3.new(0,1,0) end
-			if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then move -= Vector3.new(0,1,0) end
-			if move.Magnitude > 0 then hrp.CFrame = hrp.CFrame + move.Unit * 2 end
-		end)
-	else
-		if flyConn then flyConn:Disconnect() flyConn=nil end
-		btnFly.Text = "Fly Mode"
-	end
-end)
+-- Fungsi Lampu (toggle on/off)
+local lampuOn = false
+local pointLight = nil
 
--- Pin Lokasi (copy ke clipboard jika tersedia)
+local function toggleLampu()
+    local char = player.Character or player.CharacterAdded:Wait()
+    local hrp = char:WaitForChild("HumanoidRootPart")
+    
+    if lampuOn then
+        -- Matikan lampu
+        if pointLight then
+            pointLight:Destroy()
+            pointLight = nil
+        end
+        btnLampu.Text = "Lampu"
+        lampuOn = false
+    else
+        -- Nyalakan lampu
+        if pointLight then
+            pointLight:Destroy()
+        end
+        
+        pointLight = Instance.new("PointLight")
+        pointLight.Color = Color3.fromRGB(255, 255, 204)
+        pointLight.Brightness = 5
+        pointLight.Range = 100
+        pointLight.Parent = hrp
+        pointLight.Enabled = true
+        
+        btnLampu.Text = "Lampu (ON)"
+        lampuOn = true
+    end
+end
+
+btnLampu.MouseButton1Click:Connect(toggleLampu)
+
+-- Pin Lokasi
 btnPin.MouseButton1Click:Connect(function()
 	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	if not hrp then return end
@@ -271,18 +317,22 @@ btnPin.MouseButton1Click:Connect(function()
 	task.delay(1.2, function() btnPin.Text = "Pin Lokasi" end)
 end)
 
--- Teleport (X,Y,Z) dari satu textbox
-local tpBox = Instance.new("TextBox", toolsCard:FindFirstChildOfClass("Frame"))
-tpBox.Size = UDim2.fromOffset(180, 40)
+-- Teleport (X,Y,Z)
+local tpBox = Instance.new("TextBox")
+tpBox.Size = UDim2.fromOffset(35, 25) -- Ukuran textbox 25x35
 tpBox.BackgroundColor3 = Color3.fromRGB(255,255,255)
 tpBox.BackgroundTransparency = TEXTBOX_TRANSPARENCY
 tpBox.PlaceholderText = "X,Y,Z"
 tpBox.Font = Enum.Font.Gotham
-tpBox.TextSize = 14
+tpBox.TextSize = 9
 tpBox.TextColor3 = Color3.fromRGB(20,20,20)
 tpBox.ClearTextOnFocus = false
 tpBox.ZIndex = 60
-Instance.new("UICorner", tpBox).CornerRadius = UDim.new(0, CORNER)
+tpBox.Parent = toolsGridHolder
+
+local tpBoxCorner = Instance.new("UICorner")
+tpBoxCorner.CornerRadius = UDim.new(0, CORNER)
+tpBoxCorner.Parent = tpBox
 
 btnTp.MouseButton1Click:Connect(function()
 	local x,y,z = tpBox.Text:match("([^,]+),([^,]+),([^,]+)")
@@ -291,7 +341,7 @@ btnTp.MouseButton1Click:Connect(function()
 		local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 		if hrp then hrp.CFrame = CFrame.new(x,y,z) end
 	else
-		btnTp.Text = "Input invalid!"
-		task.delay(1.2, function() btnTp.Text = "Teleport (X,Y,Z)" end)
+		btnTp.Text = "Invalid!"
+		task.delay(1.2, function() btnTp.Text = "Teleport" end)
 	end
 end)
