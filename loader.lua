@@ -7,7 +7,7 @@ local toolbarHeight = 36
 local buttonWidth = 100
 local buttonHeight = 28
 local buttonSpacing = 5
-local buttonNames = {"Farming", "Gacha", "bekal", "gunung", "fuse", "Season 3", "teleaim", "lokasi"}
+local buttonNames = {"Farming", "Gacha", "BEKAL", "LANTAI", "fuse", "DRONE", "TELEAIM", "LOKASI"}
 
 local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
@@ -15,7 +15,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/perbekalan.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/pengendalitanah.lua",
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/Fusion.lua",
-    "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/ClaimRewardSeason.lua",
+    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/dronespy.lua",
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/aimteleport.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
 }
