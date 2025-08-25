@@ -7,13 +7,13 @@ local toolbarHeight = 36
 local buttonWidth = 50
 local buttonHeight = 28
 local buttonSpacing = 2
-local buttonNames = {"CAJ1", "CAJ2", "CP", "FLOOR", "fuse", "DRONE", "TELE", "LOC"}
+local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "fuse", "DRONE", "TELE", "LOC"}
 
 local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/autohatchx10.lua",
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/perbekalan.lua",
-    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/pengendalitanah.lua",
+    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/UiGunung.lua",
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/Fusion.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/dronespy.lua",
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/aimteleport.lua",
