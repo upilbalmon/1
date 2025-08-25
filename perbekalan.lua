@@ -90,8 +90,8 @@ local function makeTopButton(txt, col, offset)
 	return b
 end
 
-local btnClose = makeTopButton("×", CLOSE_COLOR, 8)
-local btnMin   = makeTopButton("—", MINIM_COLOR, 38)
+local btnClose = makeTopButton("×", CLOSE_COLOR, 35)
+local btnMin   = makeTopButton("—", MINIM_COLOR, 68)
 
 -- Ikon minimize di bawah layar
 local miniIcon = Instance.new("TextButton")
