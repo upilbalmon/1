@@ -4,10 +4,10 @@ local playerGui = player:WaitForChild("PlayerGui")
 
 -- Configuration
 local toolbarHeight = 36
-local buttonWidth = 100
+local buttonWidth = 50
 local buttonHeight = 28
-local buttonSpacing = 5
-local buttonNames = {"Farming", "Gacha", "BEKAL", "LANTAI", "fuse", "DRONE", "TELEAIM", "LOKASI"}
+local buttonSpacing = 2
+local buttonNames = {"CAJ1", "CAJ2", "CP", "FLOOR", "fuse", "DRONE", "TELE", "LOC"}
 
 local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
