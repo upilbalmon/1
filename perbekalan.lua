@@ -68,13 +68,10 @@ title.ZIndex = 52
 title.Parent = titleBar
 
 -- Close & Minimize (di title bar)
-local nextOffset = 4   -- jarak awal dari kanan
-local spacing    = 30  -- jarak antar tombol
-
-local function makeTopButton(txt, col)
+local function makeTopButton(txt, col, offset)
 	local b = Instance.new("TextButton")
-	b.Size = UDim2.fromOffset(26, 20) -- ukuran tombol
-	b.Position = UDim2.new(1, -nextOffset, 0.5, -10)
+	b.Size = UDim2.fromOffset(26,20) -- Tombol lebih kecil
+	b.Position = UDim2.new(1, -offset, 0.5, -10)
 	b.BackgroundColor3 = col
 	b.BackgroundTransparency = 0
 	b.Text = txt
@@ -85,21 +82,16 @@ local function makeTopButton(txt, col)
 	b.Active = true
 	b.Selectable = true
 	b.Parent = titleBar
-
-	-- Round corner biar manis
+	
 	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 5)
+	corner.CornerRadius = UDim.new(0, CORNER)
 	corner.Parent = b
-
-	-- Update offset untuk tombol berikutnya
-	nextOffset = nextOffset + spacing
-
+	
 	return b
 end
 
--- Contoh bikin tombol
-local closeBtn = makeTopButton("X", Color3.fromRGB(200, 50, 50))
-local minBtn   = makeTopButton("-", Color3.fromRGB(50, 200, 50))
+local btnClose = makeTopButton("×", CLOSE_COLOR, 8)
+local btnMin   = makeTopButton("—", MINIM_COLOR, 38)
 
 -- Ikon minimize di bawah layar
 local miniIcon = Instance.new("TextButton")
