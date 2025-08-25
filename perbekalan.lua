@@ -95,7 +95,7 @@ local btnMin   = makeTopButton("—", MINIM_COLOR, 38)
 
 -- Ikon minimize di bawah layar
 local miniIcon = Instance.new("TextButton")
-miniIcon.Size = UDim2.fromOffset(20,20)
+miniIcon.Size = UDim2.fromOffset(35,35)
 miniIcon.Position = UDim2.new(0, 6, 1, -26)
 miniIcon.BackgroundColor3 = MINIM_COLOR
 miniIcon.BackgroundTransparency = 0
