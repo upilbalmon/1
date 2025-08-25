@@ -30,39 +30,6 @@ frame.BorderSizePixel = 0
 frame.Active = true
 frame.ZIndex = 50
 
--- ===== DRAGGABLE =====
-do
-	local dragging = false
-	local dragStart, startPos
-	local function updateDrag(input)
-		local delta = input.Position - dragStart
-		frame.Position = UDim2.new(
-			startPos.X.Scale, startPos.X.Offset + delta.X,
-			startPos.Y.Scale, startPos.Y.Offset + delta.Y
-		)
-	end
-	frame.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or
-		   input.UserInputType == Enum.UserInputType.Touch then
-			dragging = true
-			dragStart = input.Position
-			startPos = frame.Position
-		end
-	end)
-	frame.InputEnded:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 or
-		   input.UserInputType == Enum.UserInputType.Touch then
-			dragging = false
-		end
-	end)
-	UIS.InputChanged:Connect(function(input)
-		if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or
-		   input.UserInputType == Enum.UserInputType.Touch) then
-			updateDrag(input)
-		end
-	end)
-end
-
 -- ===== TOMBOL TELEPORT LINGKARAN =====
 local btnAimTp = Instance.new("TextButton", frame)
 btnAimTp.Size = UDim2.fromOffset(50, 50)
