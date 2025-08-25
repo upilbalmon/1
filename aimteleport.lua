@@ -24,43 +24,11 @@ gui.Parent = playerGui
 -- ===== PANEL =====
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.fromOffset(70, 70)
-frame.Position = UDim2.new(0.5, -35, 0.5, -35)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-frame.BackgroundTransparency = 0.4
+frame.Position = UDim2.new(0.9, 15, 0.3, 0)
+frame.BackgroundTransparency = 1
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.ZIndex = 50
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
-
-local titleBar = Instance.new("Frame", frame)
-titleBar.Size = UDim2.new(1, 0, 0, 20)
-titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-titleBar.BackgroundTransparency = 0.2
-titleBar.BorderSizePixel = 0
-titleBar.ZIndex = 51
-Instance.new("UICorner", titleBar).CornerRadius = UDim.new(0, 8)
-
-local title = Instance.new("TextLabel", titleBar)
-title.Size = UDim2.new(1, -24, 1, 0)
-title.Position = UDim2.fromOffset(4, 0)
-title.BackgroundTransparency = 1
-title.Text = "Teleport"
-title.Font = Enum.Font.GothamBold
-title.TextSize = 10
-title.TextColor3 = Color3.new(1, 1, 1)
-title.TextXAlignment = Enum.TextXAlignment.Left
-title.ZIndex = 52
-
-local btnClose = Instance.new("TextButton", titleBar)
-btnClose.Size = UDim2.fromOffset(20, 20)
-btnClose.Position = UDim2.new(1, -20, 0, 0)
-btnClose.BackgroundColor3 = Color3.fromRGB(220, 0, 0)
-btnClose.Text = "×"
-btnClose.Font = Enum.Font.GothamBold
-btnClose.TextSize = 12
-btnClose.TextColor3 = Color3.new(1, 1, 1)
-btnClose.ZIndex = 60
-Instance.new("UICorner", btnClose).CornerRadius = UDim.new(1, 0)
 
 -- ===== DRAGGABLE =====
 do
@@ -73,7 +41,7 @@ do
 			startPos.Y.Scale, startPos.Y.Offset + delta.Y
 		)
 	end
-	titleBar.InputBegan:Connect(function(input)
+	frame.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or
 		   input.UserInputType == Enum.UserInputType.Touch then
 			dragging = true
@@ -81,7 +49,7 @@ do
 			startPos = frame.Position
 		end
 	end)
-	titleBar.InputEnded:Connect(function(input)
+	frame.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or
 		   input.UserInputType == Enum.UserInputType.Touch then
 			dragging = false
@@ -98,15 +66,15 @@ end
 -- ===== TOMBOL TELEPORT LINGKARAN =====
 local btnAimTp = Instance.new("TextButton", frame)
 btnAimTp.Size = UDim2.fromOffset(50, 50)
-btnAimTp.Position = UDim2.fromOffset(10, 25)
-btnAimTp.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+btnAimTp.AnchorPoint = Vector2.new(0.5, 0.5)
+btnAimTp.Position = UDim2.new(0.5, 0, 0.5, 0)
+btnAimTp.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+btnAimTp.BackgroundTransparency = 0.5
 btnAimTp.Text = "Q"
 btnAimTp.Font = Enum.Font.GothamBold
 btnAimTp.TextSize = 16
 btnAimTp.TextColor3 = Color3.new(1, 1, 1)
 btnAimTp.ZIndex = 55
-btnAimTp.AnchorPoint = Vector2.new(0.5, 0.5)
-btnAimTp.Position = UDim2.new(0.5, 0, 0.5, 10)
 Instance.new("UICorner", btnAimTp).CornerRadius = UDim.new(1, 0)
 
 -- ===== Crosshair =====
