@@ -66,7 +66,7 @@ local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.FillDirection = Enum.FillDirection.Horizontal
 UIListLayout.Padding = UDim.new(0, buttonSpacing)
 UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
 UIListLayout.Parent = buttonContainer
 
 -- Function to create smooth border blink effect
