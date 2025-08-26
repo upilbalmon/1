@@ -58,7 +58,7 @@ topAccent.Parent = toolbar
 -- Button container for proper centering
 local buttonContainer = Instance.new("Frame")
 buttonContainer.Size = UDim2.new(1, -60, 1, 0)
-buttonContainer.Position = UDim2.new(0, 0, 0, 0)
+buttonContainer.Position = UDim2.new(0.05, 0, 0, 0)
 buttonContainer.BackgroundTransparency = 1
 buttonContainer.Parent = toolbar
 
@@ -173,8 +173,8 @@ end
 
 -- Close button
 local closeBtn = Instance.new("TextButton")
-closeBtn.Size = UDim2.new(0, 28, 0, 28)
-closeBtn.Position = UDim2.new(1, -32, 0.5, -14)
+closeBtn.Size = UDim2.new(0, 20, 0, 20)
+closeBtn.Position = UDim2.new(1, -32, 0, 5)
 closeBtn.BackgroundColor3 = theme.closeButton
 closeBtn.Text = "×"
 closeBtn.TextColor3 = theme.textColor
