@@ -35,6 +35,7 @@ main.BackgroundColor3 = Color3.fromRGB(20,20,20)
 main.BackgroundTransparency = FRAME_TRANSPARENCY
 main.BorderSizePixel = 0
 main.Active = true
+main.Draggable = true
 main.ZIndex = 50
 main.Parent = gui
 
