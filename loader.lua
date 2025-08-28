@@ -69,6 +69,23 @@ UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
 UIListLayout.Parent = buttonContainer
 
+-- Create mini button (will be hidden initially)
+local miniButton = Instance.new("TextButton")
+miniButton.Size = UDim2.new(0, 40, 0, 40)
+miniButton.Position = UDim2.new(1, -45, 1, -45)
+miniButton.BackgroundColor3 = theme.accentColor
+miniButton.Text = "+"
+miniButton.TextColor3 = theme.textColor
+miniButton.TextSize = 24
+miniButton.Font = Enum.Font.GothamBold
+miniButton.AutoButtonColor = false
+miniButton.Visible = false
+miniButton.Parent = screenGui
+
+local miniCorner = Instance.new("UICorner")
+miniCorner.CornerRadius = UDim.new(0, 20)
+miniCorner.Parent = miniButton
+
 -- Function to create smooth border blink effect
 local function borderBlink(stroke)
     local tweenService = game:GetService("TweenService")
@@ -204,16 +221,51 @@ closeBtn.MouseLeave:Connect(function()
     ):Play()
 end)
 
-closeBtn.MouseButton1Click:Connect(function()
+-- Function to minimize toolbar
+local function minimizeToolbar()
     game:GetService("TweenService"):Create(
         toolbar,
         TweenInfo.new(0.3),
         {Position = UDim2.new(0, 0, 1, 10)}
     ):Play()
     task.delay(0.3, function()
-        screenGui:Destroy()
+        toolbar.Visible = false
+        miniButton.Visible = true
     end)
+end
+
+-- Function to restore toolbar
+local function restoreToolbar()
+    miniButton.Visible = false
+    toolbar.Visible = true
+    game:GetService("TweenService"):Create(
+        toolbar,
+        TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+        {Position = UDim2.new(0, 0, 1, -toolbarHeight)}
+    ):Play()
+end
+
+-- Close button click - now minimizes instead of destroying
+closeBtn.MouseButton1Click:Connect(minimizeToolbar)
+
+-- Mini button effects
+miniButton.MouseEnter:Connect(function()
+    game:GetService("TweenService"):Create(
+        miniButton,
+        TweenInfo.new(0.2),
+        {BackgroundColor3 = theme.buttonHover, Size = UDim2.new(0, 44, 0, 44)}
+    ):Play()
 end)
+
+miniButton.MouseLeave:Connect(function()
+    game:GetService("TweenService"):Create(
+        miniButton,
+        TweenInfo.new(0.2),
+        {BackgroundColor3 = theme.accentColor, Size = UDim2.new(0, 40, 0, 40)}
+    ):Play()
+end)
+
+miniButton.MouseButton1Click:Connect(restoreToolbar)
 
 -- Make toolbar draggable
 local dragInput, dragStart, startPos
