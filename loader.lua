@@ -47,14 +47,6 @@ toolbar.BackgroundTransparency = 0.2
 toolbar.BorderSizePixel = 0
 toolbar.Parent = screenGui
 
--- Add top border accent
-local topAccent = Instance.new("Frame")
-topAccent.Size = UDim2.new(1, 0, 0, 2)
-topAccent.Position = UDim2.new(0, 0, 0, 0)
-topAccent.BackgroundColor3 = theme.accentColor
-topAccent.BorderSizePixel = 0
-topAccent.Parent = toolbar
-
 -- Button container for proper centering
 local buttonContainer = Instance.new("Frame")
 buttonContainer.Size = UDim2.new(1, -60, 1, 0)
@@ -89,21 +81,21 @@ miniCorner.Parent = miniButton
 -- Function to create smooth border blink effect
 local function borderBlink(stroke)
     local tweenService = game:GetService("TweenService")
-    
+
     -- Blink on (fade in)
     local fadeIn = tweenService:Create(
         stroke,
         TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
         {Transparency = 0, Thickness = 2}
     )
-    
+
     -- Blink off (fade out)
     local fadeOut = tweenService:Create(
         stroke,
         TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
         {Transparency = 0.7, Thickness = 1}
     )
-    
+
     fadeIn:Play()
     fadeIn.Completed:Connect(function()
         fadeOut:Play()
@@ -121,19 +113,19 @@ local function createButton(name, index)
     btn.TextSize = 14
     btn.AutoButtonColor = false
     btn.Parent = buttonContainer
-    
+
     -- Button styling
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 4)
     corner.Parent = btn
-    
+
     local stroke = Instance.new("UIStroke")
     stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     stroke.Color = theme.accentColor
     stroke.Transparency = 0.7
     stroke.Thickness = 1
     stroke.Parent = btn
-    
+
     -- Button effects
     btn.MouseEnter:Connect(function()
         game:GetService("TweenService"):Create(
@@ -142,7 +134,7 @@ local function createButton(name, index)
             {BackgroundColor3 = theme.buttonHover}
         ):Play()
     end)
-    
+
     btn.MouseLeave:Connect(function()
         game:GetService("TweenService"):Create(
             btn,
@@ -150,7 +142,7 @@ local function createButton(name, index)
             {BackgroundColor3 = theme.buttonNormal}
         ):Play()
     end)
-    
+
     btn.MouseButton1Down:Connect(function()
         game:GetService("TweenService"):Create(
             btn,
@@ -158,7 +150,7 @@ local function createButton(name, index)
             {BackgroundColor3 = theme.buttonActive, Size = UDim2.new(0, buttonWidth-4, 0, buttonHeight-4)}
         ):Play()
     end)
-    
+
     btn.MouseButton1Up:Connect(function()
         game:GetService("TweenService"):Create(
             btn,
@@ -166,12 +158,12 @@ local function createButton(name, index)
             {BackgroundColor3 = theme.buttonHover, Size = UDim2.new(0, buttonWidth, 0, buttonHeight)}
         ):Play()
     end)
-    
+
     -- Button functionality with clean border blink only
     btn.MouseButton1Click:Connect(function()
         -- Trigger border blink effect
         borderBlink(stroke)
-        
+
         -- Execute script silently
         pcall(function()
             if scriptURLs[index] then
@@ -179,7 +171,7 @@ local function createButton(name, index)
             end
         end)
     end)
-    
+
     return btn
 end
 
@@ -274,7 +266,7 @@ toolbar.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragStart = input.Position
         startPos = toolbar.Position
-        
+
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragStart = nil
