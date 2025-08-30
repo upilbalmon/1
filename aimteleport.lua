@@ -24,7 +24,7 @@ gui.Parent = playerGui
 -- ===== PANEL =====
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.fromOffset(70, 70)
-frame.Position = UDim2.new(0.9, 15, 0.3, 0)
+frame.Position = UDim2.new(0.9, -26, 0.3, 85)
 frame.BackgroundTransparency = 1
 frame.BorderSizePixel = 0
 frame.Active = true
