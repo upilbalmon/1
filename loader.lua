@@ -7,7 +7,7 @@ local toolbarHeight = 36
 local buttonWidth = 50
 local buttonHeight = 28
 local buttonSpacing = 2
-local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "fuse", "TELE", "SPEED", "LOC", "BM",}
+local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "fuse", "TELE", "SPEED", "LOC", "BM", "Weater",}
 
 local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
@@ -19,6 +19,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/speed.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/locationbookmark.lua",
+    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/weaterControll.lua",
 }
 
 -- Color theme
