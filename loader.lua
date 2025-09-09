@@ -49,6 +49,8 @@ mainFrame.BackgroundColor3 = theme.background
 mainFrame.BorderSizePixel = 0
 mainFrame.ClipsDescendants = true
 mainFrame.Parent = screenGui
+MainFrame.Active = true
+MainFrame.Draggable = true
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 8)
