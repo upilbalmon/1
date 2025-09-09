@@ -2,13 +2,7 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Configuration
-local toolbarHeight = 36
-local buttonWidth = 50
-local buttonHeight = 28
-local buttonSpacing = 2
-local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "BM", "TELE", "SPEED", "LOC", "SIZE", "Weater",}
-
+-- Daftar URL skrip untuk dijalankan
 local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/autohatchx10.lua",
@@ -22,11 +16,18 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/weaterControll.lua",
 }
 
--- Color theme
+local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "BM", "TELE", "SPEED", "LOC", "SIZE", "Weater"}
+
+-- Konfigurasi UI
+local guiSize = UDim2.new(0, 150, 0, 210)
+local buttonHeight = 25
+local buttonSpacing = 5
+
+-- Tema warna
 local theme = {
-    background = Color3.fromRGB(30, 30, 40),
-    buttonNormal = Color3.fromRGB(60, 60, 80),
-    buttonHover = Color3.fromRGB(80, 80, 100),
+    background = Color3.fromRGB(40, 40, 50),
+    buttonNormal = Color3.fromRGB(60, 60, 70),
+    buttonHover = Color3.fromRGB(80, 80, 90),
     buttonActive = Color3.fromRGB(100, 150, 255),
     textColor = Color3.fromRGB(255, 255, 255),
     closeButton = Color3.fromRGB(255, 80, 80),
@@ -34,260 +35,166 @@ local theme = {
     accentColor = Color3.fromRGB(100, 150, 255)
 }
 
--- Create UI
+-- Buat GUI
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "CleanToolbarUI"
+screenGui.Name = "CustomScriptGUI"
 screenGui.ResetOnSpawn = false
-screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = playerGui
 
-local toolbar = Instance.new("Frame")
-toolbar.Size = UDim2.new(1, 0, 0, toolbarHeight)
-toolbar.Position = UDim2.new(0, 0, 1, -toolbarHeight)
-toolbar.BackgroundColor3 = theme.background
-toolbar.BackgroundTransparency = 0.2
-toolbar.BorderSizePixel = 0
-toolbar.Parent = screenGui
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = guiSize
+mainFrame.Position = UDim2.new(0.5, -75, 0.5, -105)
+mainFrame.BackgroundColor3 = theme.background
+mainFrame.BorderSizePixel = 0
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = screenGui
 
--- Button container for proper centering
-local buttonContainer = Instance.new("Frame")
-buttonContainer.Size = UDim2.new(1, -60, 1, 0)
-buttonContainer.Position = UDim2.new(0.05, 0, 0, 0)
-buttonContainer.BackgroundTransparency = 1
-buttonContainer.Parent = toolbar
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = mainFrame
 
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.FillDirection = Enum.FillDirection.Horizontal
-UIListLayout.Padding = UDim.new(0, buttonSpacing)
-UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
-UIListLayout.Parent = buttonContainer
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0, 25)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.Text = "Menu Skrip"
+titleLabel.TextColor3 = theme.textColor
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 16
+titleLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+titleLabel.BorderSizePixel = 0
+titleLabel.Parent = mainFrame
 
--- Create mini button (will be hidden initially)
-local miniButton = Instance.new("TextButton")
-miniButton.Size = UDim2.new(0, 40, 0, 40)
-miniButton.Position = UDim2.new(1, -45, 1, -45)
-miniButton.BackgroundColor3 = theme.accentColor
-miniButton.Text = "+"
-miniButton.TextColor3 = theme.textColor
-miniButton.TextSize = 24
-miniButton.Font = Enum.Font.GothamBold
-miniButton.AutoButtonColor = false
-miniButton.Visible = false
-miniButton.Parent = screenGui
+local scrollingFrame = Instance.new("ScrollingFrame")
+scrollingFrame.Size = UDim2.new(1, -10, 1, -35)
+scrollingFrame.Position = UDim2.new(0.5, -70, 0, 30)
+scrollingFrame.BackgroundColor3 = theme.background
+scrollingFrame.BackgroundTransparency = 0.5
+scrollingFrame.BorderSizePixel = 0
+scrollingFrame.ScrollBarImageColor3 = theme.accentColor
+scrollingFrame.ScrollBarThickness = 6
+scrollingFrame.Parent = mainFrame
 
-local miniCorner = Instance.new("UICorner")
-miniCorner.CornerRadius = UDim.new(0, 20)
-miniCorner.Parent = miniButton
+local listLayout = Instance.new("UIListLayout")
+listLayout.Padding = UDim.new(0, buttonSpacing)
+listLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+listLayout.Parent = scrollingFrame
 
--- Function to create smooth border blink effect
-local function borderBlink(stroke)
-    local tweenService = game:GetService("TweenService")
-
-    -- Blink on (fade in)
-    local fadeIn = tweenService:Create(
-        stroke,
-        TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {Transparency = 0, Thickness = 2}
-    )
-
-    -- Blink off (fade out)
-    local fadeOut = tweenService:Create(
-        stroke,
-        TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {Transparency = 0.7, Thickness = 1}
-    )
-
-    fadeIn:Play()
-    fadeIn.Completed:Connect(function()
-        fadeOut:Play()
-    end)
-end
-
--- Function to create buttons with effects
-local function createButton(name, index)
+-- Fungsi untuk membuat tombol
+local function createButton(name, url)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+    btn.Size = UDim2.new(1, -10, 0, buttonHeight)
     btn.BackgroundColor3 = theme.buttonNormal
     btn.Text = name
     btn.TextColor3 = theme.textColor
     btn.Font = Enum.Font.GothamMedium
     btn.TextSize = 14
     btn.AutoButtonColor = false
-    btn.Parent = buttonContainer
+    btn.Parent = scrollingFrame
 
-    -- Button styling
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 4)
-    corner.Parent = btn
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0, 4)
+    btnCorner.Parent = btn
 
-    local stroke = Instance.new("UIStroke")
-    stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    stroke.Color = theme.accentColor
-    stroke.Transparency = 0.7
-    stroke.Thickness = 1
-    stroke.Parent = btn
-
-    -- Button effects
     btn.MouseEnter:Connect(function()
-        game:GetService("TweenService"):Create(
-            btn,
-            TweenInfo.new(0.2),
-            {BackgroundColor3 = theme.buttonHover}
-        ):Play()
+        btn.BackgroundColor3 = theme.buttonHover
     end)
-
     btn.MouseLeave:Connect(function()
-        game:GetService("TweenService"):Create(
-            btn,
-            TweenInfo.new(0.2),
-            {BackgroundColor3 = theme.buttonNormal}
-        ):Play()
+        btn.BackgroundColor3 = theme.buttonNormal
     end)
-
-    btn.MouseButton1Down:Connect(function()
-        game:GetService("TweenService"):Create(
-            btn,
-            TweenInfo.new(0.1),
-            {BackgroundColor3 = theme.buttonActive, Size = UDim2.new(0, buttonWidth-4, 0, buttonHeight-4)}
-        ):Play()
-    end)
-
-    btn.MouseButton1Up:Connect(function()
-        game:GetService("TweenService"):Create(
-            btn,
-            TweenInfo.new(0.1),
-            {BackgroundColor3 = theme.buttonHover, Size = UDim2.new(0, buttonWidth, 0, buttonHeight)}
-        ):Play()
-    end)
-
-    -- Button functionality with clean border blink only
     btn.MouseButton1Click:Connect(function()
-        -- Trigger border blink effect
-        borderBlink(stroke)
-
-        -- Execute script silently
+        btn.BackgroundColor3 = theme.buttonActive
+        task.delay(0.2, function()
+            btn.BackgroundColor3 = theme.buttonNormal
+        end)
         pcall(function()
-            if scriptURLs[index] then
-                loadstring(game:HttpGet(scriptURLs[index]))()
-            end
+            loadstring(game:HttpGet(url))()
         end)
     end)
-
-    return btn
 end
 
--- Create all buttons
-for i, name in ipairs(buttonNames) do
-    createButton(name, i)
+-- Buat semua tombol
+for i, url in ipairs(scriptURLs) do
+    createButton(buttonNames[i] or "Tombol", url)
 end
 
--- Close button
-local closeBtn = Instance.new("TextButton")
-closeBtn.Size = UDim2.new(0, 20, 0, 20)
-closeBtn.Position = UDim2.new(1, -32, 0, 5)
-closeBtn.BackgroundColor3 = theme.closeButton
-closeBtn.Text = "×"
-closeBtn.TextColor3 = theme.textColor
-closeBtn.TextSize = 18
-closeBtn.Font = Enum.Font.GothamBold
-closeBtn.AutoButtonColor = false
-closeBtn.Parent = toolbar
+-- Tombol Minimize/Close
+local minimizeBtn = Instance.new("TextButton")
+minimizeBtn.Size = UDim2.new(0, 20, 0, 20)
+minimizeBtn.Position = UDim2.new(1, -25, 0, 5)
+minimizeBtn.BackgroundColor3 = theme.closeButton
+minimizeBtn.Text = "–"
+minimizeBtn.TextColor3 = theme.textColor
+minimizeBtn.Font = Enum.Font.GothamBold
+minimizeBtn.TextSize = 18
+minimizeBtn.AutoButtonColor = false
+minimizeBtn.Parent = mainFrame
 
-local closeCorner = Instance.new("UICorner")
-closeCorner.CornerRadius = UDim.new(0, 4)
-closeCorner.Parent = closeBtn
+local minCorner = Instance.new("UICorner")
+minCorner.CornerRadius = UDim.new(0, 4)
+minCorner.Parent = minimizeBtn
 
--- Close button effects
-closeBtn.MouseEnter:Connect(function()
-    game:GetService("TweenService"):Create(
-        closeBtn,
-        TweenInfo.new(0.2),
-        {BackgroundColor3 = theme.closeButtonHover, Rotation = 90}
-    ):Play()
-end)
+-- Tombol mini (saat diminimalkan)
+local miniButton = Instance.new("TextButton")
+miniButton.Size = UDim2.new(0, 30, 0, 30)
+miniButton.Position = UDim2.new(1, -40, 1, -40)
+miniButton.BackgroundColor3 = theme.accentColor
+miniButton.Text = "▲"
+miniButton.TextColor3 = theme.textColor
+miniButton.Font = Enum.Font.GothamBold
+miniButton.TextSize = 20
+miniButton.AutoButtonColor = false
+miniButton.Visible = false
+miniButton.Parent = screenGui
 
-closeBtn.MouseLeave:Connect(function()
-    game:GetService("TweenService"):Create(
-        closeBtn,
-        TweenInfo.new(0.2),
-        {BackgroundColor3 = theme.closeButton, Rotation = 0}
-    ):Play()
-end)
+local miniCorner = Instance.new("UICorner")
+miniCorner.CornerRadius = UDim.new(0, 15)
+miniCorner.Parent = miniButton
 
--- Function to minimize toolbar
-local function minimizeToolbar()
-    game:GetService("TweenService"):Create(
-        toolbar,
-        TweenInfo.new(0.3),
-        {Position = UDim2.new(0, 0, 1, 10)}
-    ):Play()
+-- Fungsi untuk meminimalkan GUI
+local function minimizeGUI()
+    game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0), Position = UDim2.new(1, 0, 1, 0)}):Play()
     task.delay(0.3, function()
-        toolbar.Visible = false
+        mainFrame.Visible = false
         miniButton.Visible = true
     end)
 end
 
--- Function to restore toolbar
-local function restoreToolbar()
+-- Fungsi untuk mengembalikan GUI
+local function restoreGUI()
     miniButton.Visible = false
-    toolbar.Visible = true
-    game:GetService("TweenService"):Create(
-        toolbar,
-        TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-        {Position = UDim2.new(0, 0, 1, -toolbarHeight)}
-    ):Play()
+    mainFrame.Visible = true
+    game:GetService("TweenService"):Create(mainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Size = guiSize, Position = UDim2.new(0.5, -75, 0.5, -105)}):Play()
 end
 
--- Close button click - now minimizes instead of destroying
-closeBtn.MouseButton1Click:Connect(minimizeToolbar)
+-- Hubungkan tombol dengan fungsinya
+minimizeBtn.MouseButton1Click:Connect(minimizeGUI)
+miniButton.MouseButton1Click:Connect(restoreGUI)
 
--- Mini button effects
-miniButton.MouseEnter:Connect(function()
-    game:GetService("TweenService"):Create(
-        miniButton,
-        TweenInfo.new(0.2),
-        {BackgroundColor3 = theme.buttonHover, Size = UDim2.new(0, 44, 0, 44)}
-    ):Play()
-end)
+-- Jadikan frame dapat diseret
+local isDragging = false
+local dragStartPos = nil
+local frameStartPos = nil
 
-miniButton.MouseLeave:Connect(function()
-    game:GetService("TweenService"):Create(
-        miniButton,
-        TweenInfo.new(0.2),
-        {BackgroundColor3 = theme.accentColor, Size = UDim2.new(0, 40, 0, 40)}
-    ):Play()
-end)
-
-miniButton.MouseButton1Click:Connect(restoreToolbar)
-
--- Make toolbar draggable
-local dragInput, dragStart, startPos
-
-toolbar.InputBegan:Connect(function(input)
+mainFrame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragStart = input.Position
-        startPos = toolbar.Position
-
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragStart = nil
-            end
-        end)
+        isDragging = true
+        dragStartPos = input.Position
+        frameStartPos = mainFrame.Position
     end
 end)
 
-toolbar.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement and dragStart then
-        local delta = input.Position - dragStart
-        toolbar.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+mainFrame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        isDragging = false
     end
 end)
 
--- Initial animation
-toolbar.Position = UDim2.new(0, 0, 1, 10)
-game:GetService("TweenService"):Create(
-    toolbar,
-    TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-    {Position = UDim2.new(0, 0, 1, -toolbarHeight)}
-):Play()
+game:GetService("RunService").Heartbeat:Connect(function()
+    if isDragging then
+        local delta = game:GetService("UserInputService"):GetMouseLocation() - dragStartPos
+        local newX = frameStartPos.X.Offset + delta.X
+        local newY = frameStartPos.Y.Offset + delta.Y
+        mainFrame.Position = UDim2.new(0, newX, 0, newY)
+    end
+end)
