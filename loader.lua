@@ -18,7 +18,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/tele.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/speed.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
-    "https://raw.githubusercontent.com/upilbalmon/Gunung/main/size.lua",
+    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/size.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/weaterControll.lua",
 }
 
