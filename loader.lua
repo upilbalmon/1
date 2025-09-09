@@ -1,12 +1,19 @@
+--[[
+   Nama Skrip: CleanToolbarUI.lua
+   Deskripsi: Membuat toolbar GUI yang bisa digeser dan berisi tombol-tombol.
+   PENTING: Letakkan skrip ini di dalam 'StarterPlayer.StarterCharacterScripts'
+   atau 'StarterPlayer.StarterPlayerScripts'. Ini HARUS berupa LocalScript.
+--]]
+
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
+local TweenService = game:GetService("TweenService")
 
 -- Configuration
-local toolbarHeight = 36
-local buttonWidth = 50
-local buttonHeight = 28
-local buttonSpacing = 2
+local toolbarSize = UDim2.new(0, 320, 0, 260)
+local buttonSize = UDim2.new(0, 60, 0, 30)
+local buttonPadding = UDim.new(0, 5)
 local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "BM", "TELE", "SPEED", "LOC", "SIZE", "Weater",}
 
 local scriptURLs = {
@@ -42,26 +49,34 @@ screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = playerGui
 
 local toolbar = Instance.new("Frame")
-toolbar.Size = UDim2.new(1, 0, 0, toolbarHeight)
-toolbar.Position = UDim2.new(0, 0, 1, -toolbarHeight)
+toolbar.Size = toolbarSize
+-- New: Position in the center of the screen
+toolbar.Position = UDim2.new(0.5, -toolbarSize.X.Offset/2, 0.5, -toolbarSize.Y.Offset/2)
 toolbar.BackgroundColor3 = theme.background
 toolbar.BackgroundTransparency = 0.2
 toolbar.BorderSizePixel = 0
 toolbar.Parent = screenGui
 
--- Button container for proper centering
+-- Draggable handle
+local dragHandle = Instance.new("Frame")
+dragHandle.Name = "DragHandle"
+dragHandle.Size = UDim2.new(1, 0, 0, 5)
+dragHandle.BackgroundTransparency = 1
+dragHandle.Parent = toolbar
+
+-- Button container
 local buttonContainer = Instance.new("Frame")
-buttonContainer.Size = UDim2.new(1, -60, 1, 0)
-buttonContainer.Position = UDim2.new(0.05, 0, 0, 0)
+buttonContainer.Size = UDim2.new(1, 0, 1, 0)
 buttonContainer.BackgroundTransparency = 1
 buttonContainer.Parent = toolbar
 
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.FillDirection = Enum.FillDirection.Horizontal
-UIListLayout.Padding = UDim.new(0, buttonSpacing)
-UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
-UIListLayout.Parent = buttonContainer
+-- Change to UIGridLayout for wrapping buttons
+local UIGridLayout = Instance.new("UIGridLayout")
+UIGridLayout.CellSize = buttonSize
+UIGridLayout.CellPadding = buttonPadding
+UIGridLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIGridLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+UIGridLayout.Parent = buttonContainer
 
 -- Create mini button (will be hidden initially)
 local miniButton = Instance.new("TextButton")
@@ -82,17 +97,15 @@ miniCorner.Parent = miniButton
 
 -- Function to create smooth border blink effect
 local function borderBlink(stroke)
-    local tweenService = game:GetService("TweenService")
-
     -- Blink on (fade in)
-    local fadeIn = tweenService:Create(
+    local fadeIn = TweenService:Create(
         stroke,
         TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
         {Transparency = 0, Thickness = 2}
     )
 
     -- Blink off (fade out)
-    local fadeOut = tweenService:Create(
+    local fadeOut = TweenService:Create(
         stroke,
         TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
         {Transparency = 0.7, Thickness = 1}
@@ -107,7 +120,7 @@ end
 -- Function to create buttons with effects
 local function createButton(name, index)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, buttonWidth, 0, buttonHeight)
+    btn.Size = buttonSize
     btn.BackgroundColor3 = theme.buttonNormal
     btn.Text = name
     btn.TextColor3 = theme.textColor
@@ -130,7 +143,7 @@ local function createButton(name, index)
 
     -- Button effects
     btn.MouseEnter:Connect(function()
-        game:GetService("TweenService"):Create(
+        TweenService:Create(
             btn,
             TweenInfo.new(0.2),
             {BackgroundColor3 = theme.buttonHover}
@@ -138,7 +151,7 @@ local function createButton(name, index)
     end)
 
     btn.MouseLeave:Connect(function()
-        game:GetService("TweenService"):Create(
+        TweenService:Create(
             btn,
             TweenInfo.new(0.2),
             {BackgroundColor3 = theme.buttonNormal}
@@ -146,18 +159,18 @@ local function createButton(name, index)
     end)
 
     btn.MouseButton1Down:Connect(function()
-        game:GetService("TweenService"):Create(
+        TweenService:Create(
             btn,
             TweenInfo.new(0.1),
-            {BackgroundColor3 = theme.buttonActive, Size = UDim2.new(0, buttonWidth-4, 0, buttonHeight-4)}
+            {BackgroundColor3 = theme.buttonActive}
         ):Play()
     end)
 
     btn.MouseButton1Up:Connect(function()
-        game:GetService("TweenService"):Create(
+        TweenService:Create(
             btn,
             TweenInfo.new(0.1),
-            {BackgroundColor3 = theme.buttonHover, Size = UDim2.new(0, buttonWidth, 0, buttonHeight)}
+            {BackgroundColor3 = theme.buttonHover}
         ):Play()
     end)
 
@@ -185,7 +198,7 @@ end
 -- Close button
 local closeBtn = Instance.new("TextButton")
 closeBtn.Size = UDim2.new(0, 20, 0, 20)
-closeBtn.Position = UDim2.new(1, -32, 0, 5)
+closeBtn.Position = UDim2.new(1, -25, 0, 5)
 closeBtn.BackgroundColor3 = theme.closeButton
 closeBtn.Text = "×"
 closeBtn.TextColor3 = theme.textColor
@@ -200,7 +213,7 @@ closeCorner.Parent = closeBtn
 
 -- Close button effects
 closeBtn.MouseEnter:Connect(function()
-    game:GetService("TweenService"):Create(
+    TweenService:Create(
         closeBtn,
         TweenInfo.new(0.2),
         {BackgroundColor3 = theme.closeButtonHover, Rotation = 90}
@@ -208,7 +221,7 @@ closeBtn.MouseEnter:Connect(function()
 end)
 
 closeBtn.MouseLeave:Connect(function()
-    game:GetService("TweenService"):Create(
+    TweenService:Create(
         closeBtn,
         TweenInfo.new(0.2),
         {BackgroundColor3 = theme.closeButton, Rotation = 0}
@@ -217,10 +230,10 @@ end)
 
 -- Function to minimize toolbar
 local function minimizeToolbar()
-    game:GetService("TweenService"):Create(
+    TweenService:Create(
         toolbar,
         TweenInfo.new(0.3),
-        {Position = UDim2.new(0, 0, 1, 10)}
+        {Position = UDim2.new(toolbar.Position.X.Scale, toolbar.Position.X.Offset, 1, 10)}
     ):Play()
     task.delay(0.3, function()
         toolbar.Visible = false
@@ -232,10 +245,10 @@ end
 local function restoreToolbar()
     miniButton.Visible = false
     toolbar.Visible = true
-    game:GetService("TweenService"):Create(
+    TweenService:Create(
         toolbar,
         TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-        {Position = UDim2.new(0, 0, 1, -toolbarHeight)}
+        {Position = UDim2.new(toolbar.Position.X.Scale, toolbar.Position.X.Offset, toolbar.Position.Y.Scale, toolbar.Position.Y.Offset)}
     ):Play()
 end
 
@@ -244,7 +257,7 @@ closeBtn.MouseButton1Click:Connect(minimizeToolbar)
 
 -- Mini button effects
 miniButton.MouseEnter:Connect(function()
-    game:GetService("TweenService"):Create(
+    TweenService:Create(
         miniButton,
         TweenInfo.new(0.2),
         {BackgroundColor3 = theme.buttonHover, Size = UDim2.new(0, 44, 0, 44)}
@@ -252,7 +265,7 @@ miniButton.MouseEnter:Connect(function()
 end)
 
 miniButton.MouseLeave:Connect(function()
-    game:GetService("TweenService"):Create(
+    TweenService:Create(
         miniButton,
         TweenInfo.new(0.2),
         {BackgroundColor3 = theme.accentColor, Size = UDim2.new(0, 40, 0, 40)}
@@ -261,10 +274,10 @@ end)
 
 miniButton.MouseButton1Click:Connect(restoreToolbar)
 
--- Make toolbar draggable
+-- Make toolbar draggable via the new DragHandle
 local dragInput, dragStart, startPos
 
-toolbar.InputBegan:Connect(function(input)
+dragHandle.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then
         dragStart = input.Position
         startPos = toolbar.Position
@@ -277,7 +290,7 @@ toolbar.InputBegan:Connect(function(input)
     end
 end)
 
-toolbar.InputChanged:Connect(function(input)
+dragHandle.InputChanged:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseMovement and dragStart then
         local delta = input.Position - dragStart
         toolbar.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
@@ -285,9 +298,9 @@ toolbar.InputChanged:Connect(function(input)
 end)
 
 -- Initial animation
-toolbar.Position = UDim2.new(0, 0, 1, 10)
-game:GetService("TweenService"):Create(
+toolbar.Position = UDim2.new(toolbar.Position.X.Scale, toolbar.Position.X.Offset, -toolbarSize.Y.Offset, -toolbarSize.Y.Offset)
+TweenService:Create(
     toolbar,
     TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-    {Position = UDim2.new(0, 0, 1, -toolbarHeight)}
+    {Position = UDim2.new(0.5, -toolbarSize.X.Offset/2, 0.5, -toolbarSize.Y.Offset/2)}
 ):Play()
