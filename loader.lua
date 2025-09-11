@@ -14,9 +14,10 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/size.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/weaterControll.lua",
+    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/teleporttoplayer.lua",
 }
 
-local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "BM", "TELE", "SPEED", "LOC", "SIZE", "Weater"}
+local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "BM", "TELE", "SPEED", "LOC", "SIZE", "Weater", "TPT"}
 
 -- Konfigurasi UI
 local guiSize = UDim2.new(0, 150, 0, 210)
