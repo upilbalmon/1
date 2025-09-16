@@ -8,7 +8,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/autohatchx10.lua",
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/perbekalan.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/UiGunung.lua",
-    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
+    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/bookmark.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/tele.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/speed.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
