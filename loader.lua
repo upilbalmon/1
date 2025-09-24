@@ -14,7 +14,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/size.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/weaterControll.lua",
-    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/teleporttoplayer.lua"
+    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/teleporttoplayer.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/tombolW.lua",
 }
 
