@@ -5,6 +5,7 @@ local playerGui = player:WaitForChild("PlayerGui")
 -- Daftar URL skrip untuk dijalankan
 local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoFarm.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/autohatchx10.lua",
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/perbekalan.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/UiGunung.lua",
@@ -18,7 +19,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/Fish/refs/heads/main/Loader.lua",
 }
 
-local buttonNames = {"CAJ1", "CAJ2", "CP", "GUNUNG", "BM", "TELE", "SPEED", "LOC", "SIZE", "Weater", "TPT", "FISH",}
+local buttonNames = {"CAJ1", "CAJ2", "CAJ3", "CP", "GUNUNG", "BM", "TELE", "SPEED", "LOC", "SIZE", "Weater", "TPT", "FISH",}
 
 -- Konfigurasi UI
 local guiSize = UDim2.new(0, 150, 0, 210)
