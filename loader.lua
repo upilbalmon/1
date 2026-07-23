@@ -9,7 +9,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/autohatchx10.lua",
     "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/perbekalan.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/UiGunung.lua",
-    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/bookmark.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/locationmark.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/tele.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/speed.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
@@ -19,7 +19,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/Fish/refs/heads/main/Loader.lua",
 }
 
-local buttonNames = {"CAJ1", "CAJ2", "CAJ3", "CP", "GUNUNG", "BM", "TELE", "SPEED", "LOC", "SIZE", "Weater", "TPT", "FISH",}
+local buttonNames = {"CAJ1", "CAJ2", "CAJ3", "CP", "GUNUNG", "locations", "TELE", "SPEED", "LOC", "SIZE", "Weater", "TPT", "FISH",}
 
 -- Konfigurasi UI
 local guiSize = UDim2.new(0, 150, 0, 210)
