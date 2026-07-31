@@ -24,7 +24,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoFarm.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtloader.lua",
-    "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/perbekalan.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/GUi/GuiLoader.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/UiGunung.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/locationmark.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/tele.lua",
@@ -36,7 +36,7 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/Fish/refs/heads/main/Loader.lua",
 }
 
-local buttonNames = {"CAJ1", "CAJ2", "CAJ loader", "CP", "GUNUNG", "locations", "TELE", "SPEED", "LOC", "SIZE", "Weater", "TPT", "FISH"}
+local buttonNames = {"CAJ1", "CAJ2", "CAJ loader", "GUi", "GUNUNG", "locations", "TELE", "SPEED", "LOC", "SIZE", "Weater", "TPT", "FISH"}
 
 -- Konfigurasi UI Compact iOS Style
 local guiSize = UDim2.new(0, 170, 0, 240)
