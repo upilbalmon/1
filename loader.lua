@@ -21,7 +21,7 @@ destroyExistingGUI()
 
 -- Daftar URL skrip untuk dijalankan
 local scriptURLs = {
-    "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua",
+    "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AutoCoinV3.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoFarm.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtloader.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/GUi/GuiLoader.lua",
