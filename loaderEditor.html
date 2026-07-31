@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Script Loader Manager - dengan Load GitHub</title>
+    <title>Script Loader Manager - dengan Drag & Drop</title>
     <style>
         * {
             margin: 0;
@@ -293,6 +293,48 @@
             background: #f8f8fc;
         }
 
+        /* ======================== DRAG & DROP STYLES =========================== */
+        tbody tr {
+            cursor: grab;
+            transition: background 0.2s;
+        }
+        tbody tr:active {
+            cursor: grabbing;
+        }
+        tbody tr.dragging {
+            opacity: 0.5;
+            background: #e5e5ea;
+        }
+        tbody tr.drag-over {
+            border-bottom: 3px solid #007aff;
+            background: #e9f2ff;
+        }
+        tbody tr.drag-over td {
+            padding-bottom: 7px;
+        }
+
+        .drag-handle {
+            display: inline-block;
+            color: #aeaeb2;
+            font-size: 18px;
+            cursor: grab;
+            user-select: none;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .col-order {
+            width: 50px;
+            text-align: center;
+            color: #8e8e93;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        /* ====================================================================== */
+
         .col-name {
             min-width: 100px;
             font-weight: 500;
@@ -490,6 +532,10 @@
             .edit-inline input {
                 flex: 1 1 auto;
             }
+            .col-order {
+                width: 35px;
+                font-size: 10px;
+            }
         }
 
         @media (max-width: 500px) {
@@ -524,6 +570,9 @@
                 text-transform: uppercase;
                 margin-right: 10px;
             }
+            .col-order {
+                display: none !important;
+            }
             .col-actions {
                 justify-content: flex-end;
             }
@@ -532,6 +581,10 @@
                 white-space: normal;
                 word-break: break-all;
             }
+            .drag-handle {
+                font-size: 14px;
+                margin-right: 4px;
+            }
         }
     </style>
 </head>
@@ -539,7 +592,7 @@
 
     <div class="container" id="app">
         <h1>📦 Script Loader Manager</h1>
-        <p class="subtitle">Kelola daftar URL dan nama tombol untuk <code>loader.lua</code> dengan mudah</p>
+        <p class="subtitle">Kelola daftar URL dan nama tombol untuk <code>loader.lua</code> — <strong>Seret ☰ untuk mengatur urutan</strong></p>
 
         <!-- GitHub Load Section -->
         <div class="github-section">
@@ -573,7 +626,7 @@
 
         <!-- Daftar -->
         <div class="list-header">
-            <h3>📋 Daftar Skrip</h3>
+            <h3>📋 Daftar Skrip <span style="font-size:12px; font-weight:400; color:#8e8e93;">(seret ikon ☰)</span></h3>
             <span class="badge" id="countBadge">0 item</span>
         </div>
 
@@ -581,8 +634,9 @@
             <table>
                 <thead>
                     <tr>
+                        <th style="width:50px;">#</th>
                         <th style="width:20%;">Nama Tombol</th>
-                        <th style="width:55%;">URL</th>
+                        <th style="width:50%;">URL</th>
                         <th style="width:25%; text-align:right;">Aksi</th>
                     </tr>
                 </thead>
@@ -638,6 +692,7 @@
         let scripts = [];
         let editingId = null;
         let isLoading = false;
+        let dragSourceId = null; // Untuk drag & drop
 
         // ======================== DOM REFS ===========================
         const tbody = document.getElementById('tableBody');
@@ -726,6 +781,72 @@
             return result;
         }
 
+        // ======================== DRAG & DROP ===========================
+        function enableDragAndDrop() {
+            const rows = tbody.querySelectorAll('tr[data-id]');
+            
+            rows.forEach(row => {
+                // Set draggable
+                row.draggable = true;
+                
+                // Drag start
+                row.addEventListener('dragstart', function(e) {
+                    dragSourceId = this.dataset.id;
+                    this.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', this.dataset.id);
+                });
+                
+                // Drag end
+                row.addEventListener('dragend', function(e) {
+                    this.classList.remove('dragging');
+                    document.querySelectorAll('tr.drag-over').forEach(el => el.classList.remove('drag-over'));
+                });
+                
+                // Drag over (target)
+                row.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    // Hanya tambahkan class jika bukan row yang sedang di-drag
+                    if (this.dataset.id !== dragSourceId) {
+                        this.classList.add('drag-over');
+                    }
+                });
+                
+                // Drag leave
+                row.addEventListener('dragleave', function(e) {
+                    this.classList.remove('drag-over');
+                });
+                
+                // Drop
+                row.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    
+                    const targetId = this.dataset.id;
+                    if (dragSourceId && dragSourceId !== targetId) {
+                        reorderItems(dragSourceId, targetId);
+                    }
+                    dragSourceId = null;
+                });
+            });
+        }
+
+        function reorderItems(sourceId, targetId) {
+            const sourceIndex = scripts.findIndex(s => s.id === sourceId);
+            const targetIndex = scripts.findIndex(s => s.id === targetId);
+            
+            if (sourceIndex === -1 || targetIndex === -1) return;
+            
+            // Pindahkan item dari source ke target
+            const [movedItem] = scripts.splice(sourceIndex, 1);
+            scripts.splice(targetIndex, 0, movedItem);
+            
+            // Re-render dengan urutan baru
+            render();
+            showToast('✅ Urutan diperbarui!', 1500);
+        }
+
         // ======================== LOAD FROM GITHUB ===========================
         async function loadFromGitHub(merge = false) {
             const url = githubUrl.value.trim();
@@ -796,16 +917,22 @@
         // ======================== RENDER TABLE ===========================
         function render() {
             if (scripts.length === 0) {
-                tbody.innerHTML = `<tr class="empty-row"><td colspan="3">Belum ada skrip. Tambahkan skrip baru atau load dari GitHub.</td></tr>`;
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="4">Belum ada skrip. Tambahkan skrip baru atau load dari GitHub.</td></tr>`;
                 countBadge.textContent = '0 item';
                 return;
             }
 
             let html = '';
-            scripts.forEach((item) => {
+            scripts.forEach((item, index) => {
                 const isEditing = (editingId === item.id);
 
-                html += `<tr>`;
+                html += `<tr data-id="${item.id}" draggable="true">`;
+                
+                // Kolom Order + Drag Handle
+                html += `<td class="col-order" data-label="#">
+                            <span class="drag-handle" title="Seret untuk mengatur urutan">☰</span>
+                            ${index + 1}
+                        </td>`;
 
                 // Kolom Nama
                 html += `<td class="col-name" data-label="Nama">`;
@@ -846,13 +973,16 @@
             tbody.innerHTML = html;
             countBadge.textContent = scripts.length + ' item';
 
+            // Aktifkan drag & drop setelah render
+            enableDragAndDrop();
             attachTableEvents();
         }
 
         // ======================== EVENT TABLE (DELEGATED) ===========================
         function attachTableEvents() {
             tbody.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.onclick = function() {
+                btn.onclick = function(e) {
+                    e.stopPropagation(); // Mencegah drag trigger
                     const id = this.dataset.id;
                     editingId = id;
                     render();
@@ -860,14 +990,16 @@
             });
 
             tbody.querySelectorAll('.cancel-edit').forEach(btn => {
-                btn.onclick = function() {
+                btn.onclick = function(e) {
+                    e.stopPropagation();
                     editingId = null;
                     render();
                 };
             });
 
             tbody.querySelectorAll('.save-edit').forEach(btn => {
-                btn.onclick = function() {
+                btn.onclick = function(e) {
+                    e.stopPropagation();
                     const id = this.dataset.id;
                     const row = this.closest('tr');
                     const nameInput = row.querySelector('.edit-name');
@@ -892,7 +1024,8 @@
             });
 
             tbody.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.onclick = function() {
+                btn.onclick = function(e) {
+                    e.stopPropagation();
                     const id = this.dataset.id;
                     if (confirm('Yakin ingin menghapus skrip ini?')) {
                         scripts = scripts.filter(s => s.id !== id);
@@ -1058,7 +1191,7 @@
         init();
 
         setTimeout(() => {
-            showToast('👋 Gunakan tombol "Load" untuk mengambil data dari GitHub!', 2500);
+            showToast('👋 Seret ikon ☰ untuk mengatur urutan skrip!', 2800);
         }, 400);
     </script>
 
