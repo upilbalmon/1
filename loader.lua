@@ -21,7 +21,7 @@ destroyExistingGUI()
 
 -- Daftar URL skrip untuk dijalankan
 local scriptURLs = {
-    "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AutoCoinV3.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtv4.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoFarm.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtloader.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/GUi/GuiLoader.lua",
@@ -33,10 +33,24 @@ local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/size.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/weaterControll.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/teleporttoplayer.lua",
-    "https://raw.githubusercontent.com/upilbalmon/Fish/refs/heads/main/Loader.lua",
+    "https://raw.githubusercontent.com/upilbalmon/Fish/refs/heads/main/Loader.lua"
 }
 
-local buttonNames = {"CAJ1", "CAJ2", "CAJ loader", "GUi", "GUNUNG", "locations", "TELE", "SPEED", "LOC", "SIZE", "Weater", "TPT", "FISH"}
+local buttonNames = {
+    "CAJT Auto V4",
+    "CAJ2",
+    "CAJ loader",
+    "GUi",
+    "GUNUNG",
+    "locations",
+    "TELE",
+    "SPEED",
+    "LOC",
+    "SIZE",
+    "Weater",
+    "TPT",
+    "FISH"
+}
 
 -- Konfigurasi UI Compact iOS Style
 local guiSize = UDim2.new(0, 170, 0, 240)
