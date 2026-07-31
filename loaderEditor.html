@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Script Loader Manager - dengan Load GitHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f2f2f7;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            max-width: 950px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+            padding: 28px 30px 36px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1c1c1e;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: #8e8e93;
+            font-size: 14px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid #e5e5ea;
+            padding-bottom: 16px;
+        }
+
+        /* GitHub Load Section */
+        .github-section {
+            background: #f0f7ff;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            border: 1px solid #cce0ff;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .github-section label {
+            font-weight: 500;
+            color: #1c1c1e;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .github-section input {
+            flex: 2;
+            min-width: 200px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #d1d1d6;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+
+        .github-section input:focus {
+            border-color: #007aff;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+        }
+
+        .github-section .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: #007aff;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #0066d9;
+            transform: scale(1.02);
+        }
+        .btn-primary:active {
+            transform: scale(0.97);
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: #34c759;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #2db84e;
+        }
+
+        .btn-danger {
+            background: #ff3b30;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #e0352b;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #007aff;
+            border: 1px solid #007aff;
+        }
+        .btn-outline:hover {
+            background: #e9f2ff;
+        }
+
+        .btn-warning {
+            background: #ff9500;
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #e68600;
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        .btn-github {
+            background: #24292e;
+            color: white;
+        }
+        .btn-github:hover {
+            background: #1a1e22;
+        }
+
+        /* Form Tambah */
+        .add-section {
+            background: #f8f8fc;
+            border-radius: 12px;
+            padding: 18px 20px 20px;
+            margin-bottom: 24px;
+            border: 1px solid #e5e5ea;
+        }
+
+        .add-section h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 12px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .form-row .field-group {
+            flex: 1 1 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-row .field-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #8e8e93;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .form-row input {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #d1d1d6;
+            font-size: 14px;
+            background: #ffffff;
+            transition: border-color 0.2s;
+            outline: none;
+            width: 100%;
+        }
+
+        .form-row input:focus {
+            border-color: #007aff;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+        }
+
+        /* Daftar URL */
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .list-header h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1c1c1e;
+        }
+
+        .list-header .badge {
+            background: #e5e5ea;
+            color: #3a3a3c;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 2px 12px;
+            border-radius: 30px;
+        }
+
+        .table-wrap {
+            border-radius: 12px;
+            border: 1px solid #e5e5ea;
+            overflow: hidden;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: #f8f8fc;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 12px 16px;
+            font-weight: 600;
+            color: #3a3a3c;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            border-bottom: 1px solid #e5e5ea;
+        }
+
+        tbody td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #f0f0f5;
+            vertical-align: middle;
+            word-break: break-word;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f8f8fc;
+        }
+
+        .col-name {
+            min-width: 100px;
+            font-weight: 500;
+            color: #1c1c1e;
+        }
+
+        .col-url {
+            color: #3a3a3c;
+            font-size: 13px;
+            max-width: 350px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .col-actions {
+            white-space: nowrap;
+            text-align: right;
+            min-width: 110px;
+        }
+
+        .col-actions .btn {
+            margin-left: 4px;
+        }
+
+        .empty-row td {
+            text-align: center;
+            color: #8e8e93;
+            padding: 30px 16px;
+            font-style: italic;
+        }
+
+        /* Edit inline */
+        .edit-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .edit-inline input {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #d1d1d6;
+            font-size: 13px;
+            outline: none;
+            flex: 1 1 120px;
+            min-width: 80px;
+        }
+
+        .edit-inline input:focus {
+            border-color: #007aff;
+        }
+
+        /* Aksi global */
+        .global-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e5ea;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .global-actions .left {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Output code */
+        .output-section {
+            margin-top: 24px;
+            background: #1c1c1e;
+            border-radius: 12px;
+            padding: 16px 20px;
+            position: relative;
+        }
+
+        .output-section .label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .output-section .label span {
+            color: #aeaeb2;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .output-section .label .btn {
+            background: #3a3a3c;
+            color: white;
+            padding: 4px 14px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        .output-section .label .btn:hover {
+            background: #4a4a4c;
+        }
+
+        .output-section pre {
+            color: #e5e5ea;
+            font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 260px;
+            overflow-y: auto;
+            background: #2c2c2e;
+            padding: 14px 16px;
+            border-radius: 8px;
+            margin: 0;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1c1c1e;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .container {
+                padding: 18px 16px 24px;
+            }
+            .github-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .github-section input {
+                flex: 1;
+            }
+            .form-row {
+                flex-direction: column;
+            }
+            .form-row .field-group {
+                flex: 1 1 auto;
+            }
+            .global-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .global-actions .left {
+                justify-content: stretch;
+            }
+            .global-actions .left .btn {
+                flex: 1;
+                justify-content: center;
+            }
+            .col-url {
+                max-width: 120px;
+            }
+            .edit-inline {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .edit-inline input {
+                flex: 1 1 auto;
+            }
+        }
+
+        @media (max-width: 500px) {
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+            }
+            thead tr {
+                display: none;
+            }
+            tbody tr {
+                border-bottom: 2px solid #e5e5ea;
+                padding: 10px 0;
+            }
+            tbody td {
+                border: none;
+                padding: 4px 12px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+            tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #3a3a3c;
+                font-size: 12px;
+                text-transform: uppercase;
+                margin-right: 10px;
+            }
+            .col-actions {
+                justify-content: flex-end;
+            }
+            .col-url {
+                max-width: 100%;
+                white-space: normal;
+                word-break: break-all;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+        <h1>📦 Script Loader Manager</h1>
+        <p class="subtitle">Kelola daftar URL dan nama tombol untuk <code>loader.lua</code> dengan mudah</p>
+
+        <!-- GitHub Load Section -->
+        <div class="github-section">
+            <label>🔗 Load dari GitHub:</label>
+            <input type="url" id="githubUrl" 
+                   value="https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/loader.lua"
+                   placeholder="URL raw loader.lua" />
+            <div class="btn-group">
+                <button class="btn btn-github" id="btnLoadGitHub">📥 Load</button>
+                <button class="btn btn-outline btn-sm" id="btnMergeGitHub" title="Gabungkan dengan data yang ada">🔄 Merge</button>
+            </div>
+        </div>
+
+        <!-- Form Tambah -->
+        <div class="add-section">
+            <h3>➕ Tambah Skrip Baru</h3>
+            <div class="form-row">
+                <div class="field-group">
+                    <label for="inputName">Nama Tombol</label>
+                    <input type="text" id="inputName" placeholder="Misal: CAJ1" />
+                </div>
+                <div class="field-group">
+                    <label for="inputUrl">URL Skrip</label>
+                    <input type="url" id="inputUrl" placeholder="https://raw.githubusercontent.com/..." />
+                </div>
+                <div class="field-group" style="flex: 0 0 auto; justify-content: flex-end;">
+                    <button class="btn btn-primary" id="btnAdd" style="margin-top: 18px;">Tambah</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daftar -->
+        <div class="list-header">
+            <h3>📋 Daftar Skrip</h3>
+            <span class="badge" id="countBadge">0 item</span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:20%;">Nama Tombol</th>
+                        <th style="width:55%;">URL</th>
+                        <th style="width:25%; text-align:right;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Isi dari JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Aksi Global -->
+        <div class="global-actions">
+            <div class="left">
+                <button class="btn btn-success" id="btnExport">⬇️ Ekspor Kode</button>
+                <button class="btn btn-outline" id="btnReset">↺ Reset ke Default</button>
+            </div>
+            <div>
+                <button class="btn btn-danger" id="btnClearAll">🗑 Hapus Semua</button>
+            </div>
+        </div>
+
+        <!-- Output Code -->
+        <div class="output-section" id="outputSection" style="display:none;">
+            <div class="label">
+                <span>📄 Kode Lua yang dihasilkan — salin dan tempel ke <code>loader.lua</code></span>
+                <button class="btn" id="btnCopyCode">📋 Salin</button>
+            </div>
+            <pre id="codeOutput"></pre>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ======================== DATA DEFAULT ===========================
+        const DEFAULT_DATA = [
+            { name: "CAJ1", url: "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AUTO%20COIN%20V3.lua" },
+            { name: "CAJ2", url: "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoFarm.lua" },
+            { name: "CAJ loader", url: "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtloader.lua" },
+            { name: "CP", url: "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/perbekalan.lua" },
+            { name: "GUNUNG", url: "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/UiGunung.lua" },
+            { name: "locations", url: "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/locationmark.lua" },
+            { name: "TELE", url: "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/tele.lua" },
+            { name: "SPEED", url: "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/speed.lua" },
+            { name: "LOC", url: "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua" },
+            { name: "SIZE", url: "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/size.lua" },
+            { name: "Weater", url: "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/weaterControll.lua" },
+            { name: "TPT", url: "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/teleporttoplayer.lua" },
+            { name: "FISH", url: "https://raw.githubusercontent.com/upilbalmon/Fish/refs/heads/main/Loader.lua" }
+        ];
+
+        // ======================== STATE ===========================
+        let scripts = [];
+        let editingId = null;
+        let isLoading = false;
+
+        // ======================== DOM REFS ===========================
+        const tbody = document.getElementById('tableBody');
+        const inputName = document.getElementById('inputName');
+        const inputUrl = document.getElementById('inputUrl');
+        const githubUrl = document.getElementById('githubUrl');
+        const btnAdd = document.getElementById('btnAdd');
+        const btnLoadGitHub = document.getElementById('btnLoadGitHub');
+        const btnMergeGitHub = document.getElementById('btnMergeGitHub');
+        const btnExport = document.getElementById('btnExport');
+        const btnReset = document.getElementById('btnReset');
+        const btnClearAll = document.getElementById('btnClearAll');
+        const btnCopyCode = document.getElementById('btnCopyCode');
+        const codeOutput = document.getElementById('codeOutput');
+        const outputSection = document.getElementById('outputSection');
+        const countBadge = document.getElementById('countBadge');
+        const toast = document.getElementById('toast');
+
+        let toastTimer = null;
+
+        // ======================== UTILITY ===========================
+        function showToast(msg, duration = 2200, isError = false) {
+            toast.textContent = msg;
+            toast.style.background = isError ? '#ff3b30' : '#1c1c1e';
+            toast.classList.add('show');
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+                toast.style.background = '#1c1c1e';
+            }, duration);
+        }
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        // ======================== PARSER LUA ===========================
+        function parseLuaArray(content, arrayName) {
+            // Mencari pattern: local arrayName = { ... } atau arrayName = { ... }
+            const regex = new RegExp(`(?:local\\s+)?${arrayName}\\s*=\\s*\\{([^}]*)\\}`, 's');
+            const match = content.match(regex);
+
+            if (!match) {
+                return [];
+            }
+
+            const arrayContent = match[1];
+            // Split per baris dan ambil nilai string
+            const lines = arrayContent.split('\n');
+            const items = [];
+
+            for (let line of lines) {
+                // Hilangkan komentar
+                line = line.replace(/--.*$/, '').trim();
+                // Cari pattern "value" atau 'value'
+                const strMatch = line.match(/["']([^"']*)["']/);
+                if (strMatch) {
+                    items.push(strMatch[1]);
+                }
+            }
+
+            return items;
+        }
+
+        function parseLoaderLua(content) {
+            const urls = parseLuaArray(content, 'scriptURLs');
+            const names = parseLuaArray(content, 'buttonNames');
+
+            // Pastikan jumlahnya sama
+            const count = Math.min(urls.length, names.length);
+            const result = [];
+
+            for (let i = 0; i < count; i++) {
+                result.push({
+                    name: names[i] || `Item${i+1}`,
+                    url: urls[i] || ''
+                });
+            }
+
+            return result;
+        }
+
+        // ======================== LOAD FROM GITHUB ===========================
+        async function loadFromGitHub(merge = false) {
+            const url = githubUrl.value.trim();
+            if (!url) {
+                showToast('Masukkan URL raw GitHub terlebih dahulu!', 1800, true);
+                return;
+            }
+
+            if (isLoading) return;
+            isLoading = true;
+            btnLoadGitHub.disabled = true;
+            btnLoadGitHub.innerHTML = '<span class="spinner"></span> Loading...';
+            btnMergeGitHub.disabled = true;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const content = await response.text();
+
+                // Parse data
+                const parsedData = parseLoaderLua(content);
+
+                if (parsedData.length === 0) {
+                    throw new Error('Tidak dapat menemukan scriptURLs atau buttonNames di file!');
+                }
+
+                // Tambahkan ID ke setiap item
+                const dataWithId = parsedData.map(item => ({
+                    ...item,
+                    id: generateId()
+                }));
+
+                if (merge) {
+                    // Merge: tambahkan data baru, cegah duplikat URL
+                    const existingUrls = new Set(scripts.map(s => s.url));
+                    let addedCount = 0;
+                    for (const item of dataWithId) {
+                        if (!existingUrls.has(item.url)) {
+                            scripts.push(item);
+                            existingUrls.add(item.url);
+                            addedCount++;
+                        }
+                    }
+                    render();
+                    showToast(`✅ Berhasil merge ${addedCount} skrip baru dari GitHub!`, 2000);
+                } else {
+                    // Replace: ganti semua data
+                    scripts = dataWithId;
+                    editingId = null;
+                    render();
+                    showToast(`✅ Berhasil load ${scripts.length} skrip dari GitHub!`, 2000);
+                }
+
+            } catch (error) {
+                console.error('Error loading from GitHub:', error);
+                showToast(`❌ Gagal load: ${error.message}`, 3000, true);
+            } finally {
+                isLoading = false;
+                btnLoadGitHub.disabled = false;
+                btnLoadGitHub.innerHTML = '📥 Load';
+                btnMergeGitHub.disabled = false;
+            }
+        }
+
+        // ======================== RENDER TABLE ===========================
+        function render() {
+            if (scripts.length === 0) {
+                tbody.innerHTML = `<tr class="empty-row"><td colspan="3">Belum ada skrip. Tambahkan skrip baru atau load dari GitHub.</td></tr>`;
+                countBadge.textContent = '0 item';
+                return;
+            }
+
+            let html = '';
+            scripts.forEach((item) => {
+                const isEditing = (editingId === item.id);
+
+                html += `<tr>`;
+
+                // Kolom Nama
+                html += `<td class="col-name" data-label="Nama">`;
+                if (isEditing) {
+                    html += `<div class="edit-inline">
+                                <input type="text" class="edit-name" value="${escapeHtml(item.name)}" placeholder="Nama" />
+                             </div>`;
+                } else {
+                    html += escapeHtml(item.name);
+                }
+                html += `</td>`;
+
+                // Kolom URL
+                html += `<td class="col-url" data-label="URL">`;
+                if (isEditing) {
+                    html += `<div class="edit-inline">
+                                <input type="url" class="edit-url" value="${escapeHtml(item.url)}" placeholder="URL" />
+                             </div>`;
+                } else {
+                    html += `<a href="${escapeHtml(item.url)}" target="_blank" style="color:#007aff;text-decoration:none;word-break:break-all;">${escapeHtml(item.url)}</a>`;
+                }
+                html += `</td>`;
+
+                // Kolom Aksi
+                html += `<td class="col-actions" data-label="Aksi">`;
+                if (isEditing) {
+                    html += `<button class="btn btn-success btn-sm save-edit" data-id="${item.id}">💾 Simpan</button>`;
+                    html += `<button class="btn btn-outline btn-sm cancel-edit" data-id="${item.id}">✕</button>`;
+                } else {
+                    html += `<button class="btn btn-outline btn-sm edit-btn" data-id="${item.id}">✏️</button>`;
+                    html += `<button class="btn btn-danger btn-sm delete-btn" data-id="${item.id}">🗑</button>`;
+                }
+                html += `</td>`;
+
+                html += `</tr>`;
+            });
+
+            tbody.innerHTML = html;
+            countBadge.textContent = scripts.length + ' item';
+
+            attachTableEvents();
+        }
+
+        // ======================== EVENT TABLE (DELEGATED) ===========================
+        function attachTableEvents() {
+            tbody.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.onclick = function() {
+                    const id = this.dataset.id;
+                    editingId = id;
+                    render();
+                };
+            });
+
+            tbody.querySelectorAll('.cancel-edit').forEach(btn => {
+                btn.onclick = function() {
+                    editingId = null;
+                    render();
+                };
+            });
+
+            tbody.querySelectorAll('.save-edit').forEach(btn => {
+                btn.onclick = function() {
+                    const id = this.dataset.id;
+                    const row = this.closest('tr');
+                    const nameInput = row.querySelector('.edit-name');
+                    const urlInput = row.querySelector('.edit-url');
+                    const newName = nameInput.value.trim();
+                    const newUrl = urlInput.value.trim();
+
+                    if (!newName || !newUrl) {
+                        showToast('Nama dan URL tidak boleh kosong!', 2000, true);
+                        return;
+                    }
+
+                    const item = scripts.find(s => s.id === id);
+                    if (item) {
+                        item.name = newName;
+                        item.url = newUrl;
+                    }
+                    editingId = null;
+                    render();
+                    showToast('✅ Skrip berhasil diperbarui!', 1500);
+                };
+            });
+
+            tbody.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.onclick = function() {
+                    const id = this.dataset.id;
+                    if (confirm('Yakin ingin menghapus skrip ini?')) {
+                        scripts = scripts.filter(s => s.id !== id);
+                        if (editingId === id) editingId = null;
+                        render();
+                        showToast('🗑 Skrip dihapus!', 1500);
+                    }
+                };
+            });
+        }
+
+        // ======================== CRUD ===========================
+        function addScript(name, url) {
+            const trimmedName = name.trim();
+            const trimmedUrl = url.trim();
+            if (!trimmedName || !trimmedUrl) {
+                showToast('Nama dan URL harus diisi!', 1800, true);
+                return false;
+            }
+            scripts.push({
+                id: generateId(),
+                name: trimmedName,
+                url: trimmedUrl
+            });
+            render();
+            return true;
+        }
+
+        function resetToDefault() {
+            if (scripts.length > 0 && !confirm('Reset akan menghapus semua perubahan. Lanjutkan?')) return;
+            scripts = DEFAULT_DATA.map(item => ({
+                ...item,
+                id: generateId()
+            }));
+            editingId = null;
+            render();
+            showToast('↺ Daftar direset ke default!', 1500);
+        }
+
+        function clearAll() {
+            if (scripts.length === 0) {
+                showToast('Daftar sudah kosong.', 1200);
+                return;
+            }
+            if (!confirm('Hapus SEMUA skrip? Tindakan ini tidak bisa dibatalkan.')) return;
+            scripts = [];
+            editingId = null;
+            render();
+            showToast('🗑 Semua skrip dihapus!', 1500);
+        }
+
+        // ======================== EKSPOR KODE ===========================
+        function generateLuaCode() {
+            const urlList = scripts.map(s => `    "${s.url}"`);
+            const nameList = scripts.map(s => `    "${s.name}"`);
+
+            let code = `-- Daftar URL skrip untuk dijalankan\n`;
+            code += `local scriptURLs = {\n`;
+            code += urlList.join(',\n') + '\n';
+            code += `}\n\n`;
+            code += `local buttonNames = {\n`;
+            code += nameList.join(',\n') + '\n';
+            code += `}`;
+
+            return code;
+        }
+
+        function exportCode() {
+            if (scripts.length === 0) {
+                showToast('Tidak ada skrip untuk diekspor!', 1800, true);
+                return;
+            }
+            const code = generateLuaCode();
+            codeOutput.textContent = code;
+            outputSection.style.display = 'block';
+            outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            showToast('✅ Kode berhasil dibuat!', 1500);
+        }
+
+        function copyCode() {
+            const text = codeOutput.textContent;
+            if (!text) {
+                showToast('Tidak ada kode untuk disalin.', 1200, true);
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 Kode disalin ke clipboard!', 1500);
+            }).catch(() => {
+                const range = document.createRange();
+                range.selectNode(codeOutput);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                document.execCommand('copy');
+                window.getSelection().removeAllRanges();
+                showToast('📋 Kode disalin!', 1500);
+            });
+        }
+
+        // ======================== INIT ===========================
+        function init() {
+            const saved = localStorage.getItem('scriptsData');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        scripts = parsed;
+                        render();
+                        return;
+                    }
+                } catch (e) { /* ignore */ }
+            }
+
+            scripts = DEFAULT_DATA.map(item => ({
+                ...item,
+                id: generateId()
+            }));
+            render();
+        }
+
+        // Simpan ke localStorage
+        const originalRender = render;
+        render = function() {
+            originalRender();
+            try {
+                localStorage.setItem('scriptsData', JSON.stringify(scripts));
+            } catch (e) { /* ignore */ }
+        };
+
+        // ======================== EVENT LISTENERS ===========================
+        btnAdd.addEventListener('click', function() {
+            const name = inputName.value;
+            const url = inputUrl.value;
+            const success = addScript(name, url);
+            if (success) {
+                inputName.value = '';
+                inputUrl.value = '';
+                inputName.focus();
+            }
+        });
+
+        inputName.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault();
+                inputUrl.focus(); } });
+        inputUrl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault();
+                btnAdd.click(); } });
+
+        btnLoadGitHub.addEventListener('click', () => loadFromGitHub(false));
+        btnMergeGitHub.addEventListener('click', () => loadFromGitHub(true));
+
+        btnExport.addEventListener('click', exportCode);
+        btnReset.addEventListener('click', resetToDefault);
+        btnClearAll.addEventListener('click', clearAll);
+        btnCopyCode.addEventListener('click', copyCode);
+
+        // Enter key pada input GitHub
+        githubUrl.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                btnLoadGitHub.click();
+            }
+        });
+
+        // ======================== START ===========================
+        init();
+
+        setTimeout(() => {
+            showToast('👋 Gunakan tombol "Load" untuk mengambil data dari GitHub!', 2500);
+        }, 400);
+    </script>
+
+</body>
+</html>
