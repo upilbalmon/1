@@ -21,33 +21,33 @@ destroyExistingGUI()
 
 -- Daftar URL skrip untuk dijalankan
 local scriptURLs = {
-    "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/AutoCoinV3.lua",
-    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoFarm.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtv4.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoBuyWing.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtloader.lua",
-    "https://raw.githubusercontent.com/upilbalmon/1/refs/heads/main/perbekalan.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/GUi/GuiLoader.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/UiGunung.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/locationmark.lua",
     "https://raw.githubusercontent.com/upilbalmon/goblox/refs/heads/main/tele.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/speed.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/koordinatsaver.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/size.lua",
-    "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/weaterControll.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/test/UiController.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/teleporttoplayer.lua",
     "https://raw.githubusercontent.com/upilbalmon/Fish/refs/heads/main/Loader.lua"
 }
 
 local buttonNames = {
-    "CAJ1",
-    "CAJ2",
+    "CAJT Auto V4",
+    "buy wing",
     "CAJ loader",
-    "CP",
+    "GUi",
     "GUNUNG",
     "locations",
     "TELE",
     "SPEED",
     "LOC",
     "SIZE",
-    "Weater",
+    "UiController",
     "TPT",
     "FISH"
 }
