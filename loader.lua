@@ -22,7 +22,7 @@ destroyExistingGUI()
 -- Daftar URL skrip untuk dijalankan
 local scriptURLs = {
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtv4.lua",
-    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoFarm.lua",
+    "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/AutoBuyWing.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/cajtloader.lua",
     "https://raw.githubusercontent.com/upilbalmon/CAJT/refs/heads/main/GUi/GuiLoader.lua",
     "https://raw.githubusercontent.com/upilbalmon/Gunung/refs/heads/main/UiGunung.lua",
@@ -38,7 +38,7 @@ local scriptURLs = {
 
 local buttonNames = {
     "CAJT Auto V4",
-    "CAJ2",
+    "buy wing",
     "CAJ loader",
     "GUi",
     "GUNUNG",
@@ -51,7 +51,6 @@ local buttonNames = {
     "TPT",
     "FISH"
 }
-
 -- Konfigurasi UI Compact iOS Style
 local guiSize = UDim2.new(0, 170, 0, 240)
 local buttonHeight = 28
